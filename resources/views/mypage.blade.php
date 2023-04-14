@@ -52,7 +52,7 @@
           @foreach ($reservations as $index => $reservation)
           <div class="fixed-width my-8 pl-6">
               <div class="box-content border-blue-600 bg-blue-600 h-full w-full rounded-lg relative shadow-3xl">
-                  <div class="text- text-white pt-8 ml-5 mb-5 ">
+                  <div class="text- text-white pt-5 ml-5 mr-5 mb-5 ">
                       <div class="flex justify-between mb-5">
                           <div class="flex items-center">
                               <div class="bg-cover bg-center bg-no-repeat w-8 h-8" style="background-image: url('/img/clock.svg');"></div>
@@ -66,26 +66,37 @@
                               </button>
                           </form>
                       </div>
-                      <p>予約ID: {{ $reservation->id }}</p>
-                      <div class="pb-5">
-                          <table>
-                              <tr>
-                                  <th class="block mr-20 text-left">Shop</th>
-                                  <td class="pb-5">{{ $reservation->shop->name ?? 'Unknown' }}</td>
-                              </tr>
-                              <tr>
-                                  <th class="block mr-20 text-left">Date</th>
-                                  <td class="pb-5">{{ date('Y-m-d', strtotime($reservation->start_at)) }}</td>
-                              </tr>
-                              <tr>
-                                  <th class="block mr-20 text-left">Time</th>
-                                  <td class="pb-5">{{ date('H:i', strtotime($reservation->start_at)) }}</td>
-                              </tr>
-                              <tr>
-                                  <th class="block mr-20 text-left">Number</th>
-                                  <td class="pb-5">{{ $reservation->num_of_users }}</td>
-                              </tr>
-                          </table>
+                      <div>
+                        <table>
+                          <tr>
+                            <th class="block mr-20 text-left">Shop</th>
+                            <td class="pb-5">{{ $reservation->shop->name ?? 'Unknown' }}</td>
+                          </tr>
+                          <tr>
+                            <th class="block mr-20 text-left">Date</th>
+                            <td class="pb-5">{{ date('Y-m-d', strtotime($reservation->start_at)) }}</td>
+                          </tr>
+                          <tr>
+                            <th class="block mr-20 text-left">Time</th>
+                            <td class="pb-5">{{ date('H:i', strtotime($reservation->start_at)) }}</td>
+                          </tr>
+                          <tr>
+                            <th class="block mr-20 text-left">Number</th>
+                            <td class="pb-5">{{ $reservation->num_of_users }}</td>
+                          </tr>
+                        </table>
+                      </div>
+                      <div class="flex justify-between">
+                        <button class="bg-white hover:bg-blue-200 text-blue-600 rounded-lg px-4 py-2 mb-3">
+                          <a href="" class="inline-flex items-center h-full">
+                            <span class="text-lg font-semibold">予約を更新する</span>
+                          </a>
+                        </button>
+                        <button class="bg-white hover:bg-blue-200 text-blue-600 rounded-lg px-4 py-2 mb-3">
+                          <a href="{{ route('reviews.create', ['shop_id' => $reservation->shop->id]) }}" class="inline-flex items-center h-full">
+                            <span class="text-lg font-semibold">レビューを書く</span>
+                          </a>
+                        </button>
                       </div>
                   </div>
               </div>

@@ -16,7 +16,7 @@ class ReservationController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        
+
         $start_at = $request->start_at . ' ' . $request->time;
 
         Reservation::createReservation(
@@ -31,14 +31,6 @@ class ReservationController extends Controller
 
     public function delete(Request $request)
     {
-        // $validator = Validator::make($request->all(), [
-        //     'reservation_id' => 'required|exists:reservations,id',
-        // ]);
-
-        // if ($validator->fails()) {
-        //     return redirect()->route('mypage')->withErrors($validator);
-        // }
-
         $reservation = Reservation::findOrFail($request->reservation_id);
         $reservation->delete();
 

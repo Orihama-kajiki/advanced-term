@@ -1,3 +1,4 @@
+const menuBtn = document.querySelector('.menu-btn');
 $(document).ready(function () {
     $("#calendar").datepicker({
         dateFormat: "yy-mm-dd",
@@ -37,6 +38,7 @@ $(document).ready(function () {
         setReservationValues(numOfUsers, startAt);
         document.getElementById("reservation-form-btn").submit();
     });
+    setupCommonEventListeners();
 });
 function setReservationValues(num_of_users, start_at) {
     const numOfUsersInput = document.getElementById("num_of_users");
@@ -45,4 +47,15 @@ function setReservationValues(num_of_users, start_at) {
     numOfUsersInput.value = num_of_users;
     startAtInput.value = start_at;
 }
+window.toggleModal = function () {
+    const modalBg = document.querySelector('.modal-bg');
+    const modalContent = document.querySelector('.modal-content');
 
+    modalBg.classList.toggle('hidden');
+    modalContent.classList.toggle('hidden');
+    menuBtn.classList.toggle('menu-open');
+}
+
+function setupCommonEventListeners() {
+    menuBtn.addEventListener('click', toggleModal);
+}

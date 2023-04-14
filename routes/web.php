@@ -5,6 +5,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
@@ -21,13 +22,15 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-  Route::get('/mypage', [UserController::class, 'mypage'])->name('mypage');
-  Route::get('/mypage/favorites', [UserController::class, 'getFavoriteShops'])->name('mypage.favorites');
-  Route::post('/favorite', [FavoriteController::class, 'store'])->name('favorite.store');
-  Route::post('/reserve', [ReservationController::class, 'store'])->name('reserve.store');
-  Route::get('/done', function () {
-      return view('done');
-  })->name('done');
-  Route::post('/reserve/delete', [ReservationController::class, 'delete'])->name('reserve.delete');
-  Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+    Route::get('/mypage', [UserController::class, 'mypage'])->name('mypage');
+    Route::get('/mypage/favorites', [UserController::class, 'getFavoriteShops'])->name('mypage.favorites');
+    Route::post('/favorite', [FavoriteController::class, 'store'])->name('favorite.store');
+    Route::get('reviews/create', [ReviewController::class,'create'])->name('reviews.create'); 
+    Route::post('reviews/store', [ReviewController::class,'store'])->name('reviews.store');
+    Route::post('/reserve', [ReservationController::class, 'store'])->name('reserve.store');
+    Route::get('/done', function () {
+        return view('done');
+    })->name('done');
+    Route::post('/reserve/delete', [ReservationController::class, 'delete'])->name('reserve.delete');
+    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

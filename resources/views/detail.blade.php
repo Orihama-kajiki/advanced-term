@@ -25,42 +25,42 @@
             <a href="/" class="text-5xl font-extrabold text-blue-600 ml-20">Rese</a>
           </div>
           <div class="fixed inset-0 bg-white z-20 modal-bg hidden"></div>
-          <div class="fixed inset-0 flex items-center justify-center z-30 modal-content hidden">
-            <div class="bg-white text-center">
-              <ul class="menu">
-                <li class="menu__item px-4 py-2"><a href="/">Home</a></li>
-                @guest
-                <li class="menu__item px-4 py-2"><a href="{{ route('register') }}">Registration</a></li>
-                <li class="menu__item px-4 py-2"><a href="{{ route('login') }}">Login</a></li>
-                @else
-                <li class="menu__item px-4 py-2"><a href="{{ route('mypage') }}">Mypage</a></li>
-                <li class="menu__item px-4 py-2">
-                  <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit">Logout</button>
-                  </form>
-                </li>
-                @endguest
-              </ul>
+            <div class="fixed inset-0 flex items-center justify-center z-30 modal-content hidden">
+              <div class="bg-white text-center">
+                <ul class="menu">
+                  <li class="menu__item px-4 py-2"><a href="/">Home</a></li>
+                  @guest
+                  <li class="menu__item px-4 py-2"><a href="{{ route('register') }}">Registration</a></li>
+                  <li class="menu__item px-4 py-2"><a href="{{ route('login') }}">Login</a></li>
+                  @else
+                  <li class="menu__item px-4 py-2"><a href="{{ route('mypage') }}">Mypage</a></li>
+                  <li class="menu__item px-4 py-2">
+                    <form method="POST" action="{{ route('logout') }}">
+                      @csrf
+                      <button type="submit">Logout</button>
+                    </form>
+                  </li>
+                  @endguest
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="pt-16 relative">
-          <div class="flex">
-            <a href="/" class="arrow_btn cursor-pointer h-10 w-10 mr-6 absolute left-0 bg-white rounded-lg shadow-3xl"></a>
-            <h2 class="text-4xl font-extrabold ml-14 text-center">{{ $shop->name }}</h2>
+          <div class="pt-16 relative">
+            <div class="flex">
+              <a href="/" class="arrow_btn cursor-pointer h-10 w-10 mr-6 absolute left-0 bg-white rounded-lg shadow-3xl"></a>
+              <h2 class="text-4xl font-extrabold ml-14 text-center">{{ $shop->name }}</h2>
+            </div>
           </div>
-        </div>
-        <div class="w-full h-96 my-8">
-          <img src="{{ $shop->image_url }}" alt="店舗画像" class="w-full h-full object-cover object-center">
-        </div>
-        <div class="flex items-center mb-5">
-          <h3 class="text-lg font-bold">#{{ $shop->area->name }}</h3>
-          <h3 class="text-lg font-bold">#{{ $shop->genre->name }}</h3>
-        </div>
-        <div class="w-full h-20">
-          <h4 class="text-lg font-bold">{{ $shop->description }}</h4>
-        </div>
+          <div class="w-full h-96 my-8">
+            <img src="{{ $shop->image_url }}" alt="店舗画像" class="w-full h-full object-cover object-center">
+          </div>
+          <div class="flex items-center mb-5">
+            <h3 class="text-lg font-bold">#{{ $shop->area->name }}</h3>
+            <h3 class="text-lg font-bold">#{{ $shop->genre->name }}</h3>
+          </div>
+          <div class="w-full h-20">
+            <h4 class="text-lg font-bold">{{ $shop->description }}</h4>
+          </div>
       </div>
     </div>
     <div class="flex-1 pl-10 h-full ">
