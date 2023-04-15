@@ -34,7 +34,7 @@ function createShopCardHTML(shop, index) {
   const genreName = shop.genre ? shop.genre.name : '';
 
   return `
-    <div class="max-w-[380px] w-full mb-8 mr-4 rounded-lg shadow-3xl">
+    <div class="card-container w-full mb-8 mr-4 rounded-lg shadow-3xl">
       <div class="bg-white rounded-lg overflow-hidden">
         <img src="${shop.image_url}" alt="店舗画像" class="w-full h-48 object-cover object-center">
         <div class="p-4">
@@ -58,7 +58,7 @@ function createShopCardHTML(shop, index) {
 function renderSearchResults(filteredShops) {
   const searchResultsContainer = document.getElementById('search-results');
   const resultsHTML = filteredShops.map((shop, index) => createShopCardHTML(shop, index)).join('');
-  searchResultsContainer.innerHTML = `<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">${resultsHTML}</div>`;
+  searchResultsContainer.innerHTML = `<div class="grid grid-cols-1 md:grid-cols-4 gap-4">${resultsHTML}</div>`;
 }
 
 function updateSearchResults() {

@@ -35,14 +35,14 @@ function filterShops(shops, selectedArea, selectedGenre, searchShopName) {
 function createShopCardHTML(shop, index) {
   var areaName = shop.area ? shop.area.name : '';
   var genreName = shop.genre ? shop.genre.name : '';
-  return "\n    <div class=\"max-w-[380px] w-full mb-8 mr-4 rounded-lg shadow-3xl\">\n      <div class=\"bg-white rounded-lg overflow-hidden\">\n        <img src=\"".concat(shop.image_url, "\" alt=\"\u5E97\u8217\u753B\u50CF\" class=\"w-full h-48 object-cover object-center\">\n        <div class=\"p-4\">\n          <h3 class=\"text-lg font-bold text-gray-900\">").concat(shop.name, "</h3>\n          <div class=\"flex items-center mt-2 text-gray-700\">\n            <span class=\"text-sm font-bold\">#").concat(areaName, "</span>\n            <span class=\"text-sm font-bold\">#").concat(genreName, "</span>\n          </div>\n          <div class=\"flex items-center mt-2 text-gray-700\">\n            <a href=\"/detail/").concat(shop.id, "\" class=\"bg-blue-600 text-white px-5 py-1 rounded-lg tracking-widest text-base\">\u8A73\u3057\u304F\u307F\u308B</a>\n            <button id=\"favorite-btn-").concat(index, "\" class=\"favorite-btn text-3xl text-gray-200 ml-auto p-2\" data-shop-id=\"").concat(shop.id, "\">\n              <i class=\"fa-solid fa-heart\"></i>\n            </button>\n          </div>\n        </div>\n      </div>\n    </div>\n  ");
+  return "\n    <div class=\"card-container w-full mb-8 mr-4 rounded-lg shadow-3xl\">\n      <div class=\"bg-white rounded-lg overflow-hidden\">\n        <img src=\"".concat(shop.image_url, "\" alt=\"\u5E97\u8217\u753B\u50CF\" class=\"w-full h-48 object-cover object-center\">\n        <div class=\"p-4\">\n          <h3 class=\"text-lg font-bold text-gray-900\">").concat(shop.name, "</h3>\n          <div class=\"flex items-center mt-2 text-gray-700\">\n            <span class=\"text-sm font-bold\">#").concat(areaName, "</span>\n            <span class=\"text-sm font-bold\">#").concat(genreName, "</span>\n          </div>\n          <div class=\"flex items-center mt-2 text-gray-700\">\n            <a href=\"/detail/").concat(shop.id, "\" class=\"bg-blue-600 text-white px-5 py-1 rounded-lg tracking-widest text-base\">\u8A73\u3057\u304F\u307F\u308B</a>\n            <button id=\"favorite-btn-").concat(index, "\" class=\"favorite-btn text-3xl text-gray-200 ml-auto p-2\" data-shop-id=\"").concat(shop.id, "\">\n              <i class=\"fa-solid fa-heart\"></i>\n            </button>\n          </div>\n        </div>\n      </div>\n    </div>\n  ");
 }
 function renderSearchResults(filteredShops) {
   var searchResultsContainer = document.getElementById('search-results');
   var resultsHTML = filteredShops.map(function (shop, index) {
     return createShopCardHTML(shop, index);
   }).join('');
-  searchResultsContainer.innerHTML = "<div class=\"grid grid-cols-1 lg:grid-cols-4 gap-4\">".concat(resultsHTML, "</div>");
+  searchResultsContainer.innerHTML = "<div class=\"grid grid-cols-1 md:grid-cols-4 gap-4\">".concat(resultsHTML, "</div>");
 }
 function updateSearchResults() {
   var selectedArea = areaSelect.value;
