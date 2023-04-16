@@ -11,8 +11,8 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0-beta2/css/all.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
-  <div class="px-8 md:px-20 bg-gray-100 h-screen">
+<body class="min-h-screen px-8 md:px-20 bg-gray-100">
+  <div class="h-screen">
     <header class="flex flex-col w-full py-10 md:flex-row justify-between">
       <div id="app-js" class="relative mb-5 md:mb-0">
         <div class="flex">
@@ -65,7 +65,7 @@
           <div class="search_detail flex items-center w-1/2 rounded-tr-lg rounded-br-lg">
             <span class="sr-only">Search</span>
             <span class="bg-white bg-center bg-no-repeat w-6 h-6" id="search-icon" style="background-image: url('/img/search.svg');"></span>
-            <input type="text" class="block h-full w-full py-2 pl-12 rounded-tr-lg rounded-br-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-lg" placeholder="Search ..." id="searchInput">
+            <input type="text" class="block h-full w-full py-2 pl-10 font-bold rounded-tr-lg rounded-br-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-0 focus:border-transparent sm:text-lg" placeholder="Search ..." id="searchInput" autocomplete="off">
           </div>
         </form>
       </div>

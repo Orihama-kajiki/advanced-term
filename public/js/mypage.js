@@ -1,3 +1,17 @@
+const menuBtn = document.querySelector('.menu-btn');
+window.toggleModal = function () {
+  const modalBg = document.querySelector('.modal-bg');
+  const modalContent = document.querySelector('.modal-content');
+
+  modalBg.classList.toggle('hidden');
+  modalContent.classList.toggle('hidden');
+  menuBtn.classList.toggle('menu-open');
+}
+
+function setupCommonEventListeners() {
+  menuBtn.addEventListener('click', toggleModal);
+}
+
 function updateFavoriteButtons() {
   const favoriteButtons = document.querySelectorAll('.favorite-btn');
   favoriteButtons.forEach(button => {

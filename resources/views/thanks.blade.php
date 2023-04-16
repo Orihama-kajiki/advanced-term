@@ -5,21 +5,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rese</title>
-  <link rel="stylesheet" href="css/reset.css" />
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body >
   <div class="bg-gray-100 h-screen w-screen px-20 pt-10 pb-6">
     <div id="app-js" class="relative">
       <div class="flex">
-        <div class="menu-btn mr-6 absolute left-0 bg-blue-600 shadow-3xl z-40" onclick="toggleModal()">
+        <div class="menu-btn mr-6 absolute left-0 bg-blue-600 shadow-3xl z-40">
           <span class="line_1"></span>
           <span class="line_2"></span>
           <span class="line_3"></span>
         </div>
         <a href="/" class="text-5xl font-extrabold text-blue-600 ml-20">Rese</a>
       </div>
-      <div class="fixed inset-0 bg-white z-20 modal-bg hidden" onclick="toggleModal()"></div>
+      <div class="fixed inset-0 bg-white z-20 modal-bg hidden"></div>
       <div class="fixed inset-0 flex items-center justify-center z-30 modal-content hidden">
         <div class="bg-white text-center">
           <ul class="menu">

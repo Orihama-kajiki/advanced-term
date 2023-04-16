@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0-beta2/css/all.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body class="bg-gray-100 px-8 md:px-12 lg:px-20 h-screen">
+<body class="bg-gray-100 px-8 md:px-12 lg:px-20 min-h-screen">
   <header class="w-full py-10">
     <div id="app-js" class="relative">
       <div class="flex">
@@ -43,8 +43,8 @@
       </div>
     </div>
   </header>
-  <div class="flex bg-gray-100 h-2/3">
-    <div class="flex-1 mr-10">
+  <div class="flex flex-col md:flex-row bg-gray-100 h-2/3">
+    <div class="flex-1 mb-10 md:mr-10 md:mb-0">
     @if (session('success'))
       <div class="flex justify-center alert alert-success">
         <div class="h-64 w-96 mt-32 border border-white bg-white rounded-lg shadow-3xl flex flex-col justify-center items-center">
@@ -59,9 +59,9 @@
         </div>
       </div>
     @elseif ($shop)
-      <div class="box-content border-blue-600 bg-blue-600 h-full w-full rounded-lg relative shadow-3xl">
+      <div class="box-content border-blue-600 bg-blue-600 min-h-full w-full rounded-lg relative shadow-3xl md:min-h-full h-[30rem]">
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5">
-          <span class="relative score-text">点数</span>
+          <span>点数</span>
         </div>
           <form method="POST" action="{{ route('reviews.store') }}" class="h-2/3">
             @csrf
@@ -75,7 +75,7 @@
               <input type="hidden" name="rating" id="rating" value="">
             </div>
             <div class="form-group mx-3 mt-auto h-2/3">
-              <textarea name="comment" id="comment" rows="4" class="form-control h-full w-full px-3 py-3 border-blue-300 bg-blue-300 border-4 rounded-lg resize-none" placeholder="ここにコメントを入力してください。"></textarea>
+              <textarea name="comment" id="comment" rows="4" class="form-control min-h-full w-full px-3 py-3 border-blue-300 bg-blue-300 border-4 rounded-lg resize-none" placeholder="ここにコメントを入力してください。"></textarea>
             </div>
             <div class="bg-blue-700 h-16 w-full bottom-0 rounded-b-lg absolute">
               <button type="submit" class="text-lg text-white text-center items-center w-full h-full">
@@ -88,7 +88,7 @@
         @endif
       </div>
     </div>
-    <div class="flex-1 ">
+    <div class="flex-1 pb-10">
       @if ($shop && !session('success'))
         <div class="w-full h-96 my-8">
           <img src="{{ $shop->image_url }}" alt="店舗画像" class="w-full h-full object-cover object-center">

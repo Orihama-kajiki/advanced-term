@@ -13,7 +13,7 @@
   <div class="w-screen h-screen px-20 pt-10 pb-6">
     <div class="relative w-full">
       <div class="flex md:mb-20">
-        <div class="menu-btn mr-6 absolute left-0 bg-blue-600 shadow-3xl z-40" onclick="toggleModal()">
+        <div class="menu-btn mr-6 absolute left-0 bg-blue-600 shadow-3xl z-40" onclick="window.toggleModal()">
           <span class="line_1"></span>
           <span class="line_2"></span>
           <span class="line_3"></span>

@@ -540,6 +540,9 @@ video {
 .-mr-2 {
   margin-right: -0.5rem;
 }
+.mb-10 {
+  margin-bottom: 2.5rem;
+}
 .mb-12 {
   margin-bottom: 3rem;
 }
@@ -582,9 +585,6 @@ video {
 .ml-auto {
   margin-left: auto;
 }
-.mr-10 {
-  margin-right: 2.5rem;
-}
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -596,9 +596,6 @@ video {
 }
 .mr-6 {
   margin-right: 1.5rem;
-}
-.mr-8 {
-  margin-right: 2rem;
 }
 .mt-1 {
   margin-top: 0.25rem;
@@ -617,6 +614,9 @@ video {
 }
 .mt-4 {
   margin-top: 1rem;
+}
+.mt-40 {
+  margin-top: 10rem;
 }
 .mt-6 {
   margin-top: 1.5rem;
@@ -687,11 +687,17 @@ video {
 .h-96 {
   height: 24rem;
 }
+.h-\[30rem\] {
+  height: 30rem;
+}
 .h-full {
   height: 100%;
 }
 .h-screen {
   height: 100vh;
+}
+.min-h-full {
+  min-height: 100%;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -713,9 +719,6 @@ video {
 }
 .w-4 {
   width: 1rem;
-}
-.w-4\/5 {
-  width: 80%;
 }
 .w-48 {
   width: 12rem;
@@ -746,6 +749,9 @@ video {
 }
 .shrink-0 {
   flex-shrink: 0;
+}
+.flex-grow {
+  flex-grow: 1;
 }
 .table-fixed {
   table-layout: fixed;
@@ -825,6 +831,9 @@ video {
 }
 .overflow-hidden {
   overflow: hidden;
+}
+.overflow-y-auto {
+  overflow-y: auto;
 }
 .rounded {
   border-radius: 0.25rem;
@@ -1024,6 +1033,12 @@ video {
 .pb-1 {
   padding-bottom: 0.25rem;
 }
+.pb-10 {
+  padding-bottom: 2.5rem;
+}
+.pb-20 {
+  padding-bottom: 5rem;
+}
 .pb-3 {
   padding-bottom: 0.75rem;
 }
@@ -1036,9 +1051,6 @@ video {
 .pl-10 {
   padding-left: 2.5rem;
 }
-.pl-12 {
-  padding-left: 3rem;
-}
 .pl-2 {
   padding-left: 0.5rem;
 }
@@ -1048,9 +1060,6 @@ video {
 .pl-8 {
   padding-left: 2rem;
 }
-.pr-10 {
-  padding-right: 2.5rem;
-}
 .pr-12 {
   padding-right: 3rem;
 }
@@ -1059,6 +1068,9 @@ video {
 }
 .pr-7 {
   padding-right: 1.75rem;
+}
+.pr-8 {
+  padding-right: 2rem;
 }
 .pt-1 {
   padding-top: 0.25rem;
@@ -1385,11 +1397,19 @@ video {
 .genre_detail,
 .search_detail,
 .resavation_detail {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.resavation_detail select {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
   font-weight: bold;
-  position: relative;
+  width: 100%;
+  height: 100%;
+  padding-right: 30px;
 }
 
 .area_detail::before,
@@ -1401,19 +1421,20 @@ video {
   width: 0;
   height: 0;
   margin-top: -5px;
+  pointer-events: none;
 }
 
 .resavation_detail::before {
-  left: 88%;
+  right: 40px;
   border-top: 11px solid #dcdcdc;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  pointer-events: none;
 }
 
 .area_detail::before,
 .genre_detail::before {
-  right: 20px;
+  top: 50%;
+  right: 10px;
   border-top: 15px solid #dcdcdc;
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
@@ -1447,29 +1468,8 @@ video {
   width: 2rem;
   background-size: contain;
   padding-left: 2.5rem;
-}
-
-.custom-datepicker {
-  background-color: white;
-  color: #333;
-  border: 1px solid #d1d5db;
-  border-radius: 0.375rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.custom-datepicker .ui-state-default {
-  background-color: #f1f5f9;
-  color: #333;
-}
-
-.custom-datepicker .ui-state-active {
-  background-color: #3b82f6;
-  color: white;
-}
-
-.custom-datepicker .ui-state-hover {
-  background-color: #93c5fd;
-  color: #333;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .carender-icon {
@@ -1478,16 +1478,6 @@ video {
   left: 210px;
   transform: translateY(-50%);
   cursor: pointer;
-}
-
-.score-text::after {
-  content: '（総合的な満足度を5点満点で評価してください。）';
-  position: absolute;
-  top: 0;
-  left: 100%;
-  white-space: nowrap;
-  font-size: 1rem;
-  color: black;
 }
 
 .star {
@@ -1502,21 +1492,6 @@ video {
   .card-container {
     width: calc(100% - 0.75rem);
   }
-}
-
-.table-responsive {
-  display: block;
-  overflow-x: auto;
-}
-
-th,
-td {
-  min-width: 100px;
-  padding: 0 0.5rem;
-}
-
-th {
-  text-align: left;
 }
 
 .hover\:border-gray-300:hover {
@@ -1750,8 +1725,24 @@ th {
     margin-bottom: 5rem;
   }
 
+  .md\:mr-10 {
+    margin-right: 2.5rem;
+  }
+
+  .md\:min-h-full {
+    min-height: 100%;
+  }
+
   .md\:w-2\/4 {
     width: 50%;
+  }
+
+  .md\:w-auto {
+    width: auto;
+  }
+
+  .md\:flex-1 {
+    flex: 1 1 0%;
   }
 
   .md\:grid-cols-2 {
@@ -1774,6 +1765,14 @@ th {
   .md\:px-20 {
     padding-left: 5rem;
     padding-right: 5rem;
+  }
+
+  .md\:pl-10 {
+    padding-left: 2.5rem;
+  }
+
+  .md\:pr-10 {
+    padding-right: 2.5rem;
   }
 }
 
@@ -1821,4 +1820,5 @@ th {
     padding-top: 0px;
   }
 }
+
 
