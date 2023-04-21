@@ -8,6 +8,16 @@ use Validator;
 
 class Reservation extends Model
 {
+
+    use HasFactory;
+
+    protected $fillable = [
+        'shop_id',
+        'user_id',
+        'num_of_users',
+        'start_at',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -21,8 +31,6 @@ class Reservation extends Model
     public static function validate($data)
     {
         $rules = [
-            'shop_id' => 'required|integer',
-            'user_id' => 'required|integer',
             'num_of_users' => 'required|integer',
             'start_at' => 'required|date',
         ];

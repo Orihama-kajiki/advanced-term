@@ -8,8 +8,8 @@
   <script src="/js/jquery-3.6.4.min.js"></script>
   <script src="/js/jquery-ui-1.13.2.custom/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="/css/reset.css" />
-  <link rel="stylesheet" href="/js/jquery-ui-1.13.2.custom/jquery-ui.min.css" />
   <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="/js/jquery-ui-1.13.2.custom/jquery-ui.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body class="detail-page bg-gray-100 w-screen min-h-screen">
