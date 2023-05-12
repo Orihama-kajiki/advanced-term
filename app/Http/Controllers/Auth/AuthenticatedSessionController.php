@@ -10,37 +10,21 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     *
-     * @return \Illuminate\View\View
-     */
+
     public function create()
     {
         return view('auth.login');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function store(LoginRequest $request)
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        return $this->authenticated($request, Auth::user());
     }
 
-    /**
-     * Destroy an authenticated session.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
     public function destroy(Request $request)
     {
         Auth::guard('web')->logout();
@@ -51,4 +35,18 @@ class AuthenticatedSessionController extends Controller
 
         return redirect('/');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->hasRole('管理者')) {
+            return redirect()->route('admin.index');
+        }
+
+        if ($user->hasRole('店舗責任者')) {
+            return redirect()->route('owner.index');
+        }
+
+        return redirect()->route('shops.index');
+    }
+
 }

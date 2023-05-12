@@ -56,6 +56,19 @@ window.updateModal = async function (reservationId) {
   reservationIdInput.value = reservationId;
 }
 
+let openModalButton = document.querySelector('.open-modal-3');
+if (openModalButton) {
+    openModalButton.addEventListener('click', function() {
+        const qrCodeModal = document.getElementById('qr-code-modal');
+        qrCodeModal.classList.remove('hidden');
+    });
+}
+
+document.getElementById('close-modal').addEventListener('click', function() {
+    const qrCodeModal = document.getElementById('qr-code-modal');
+    qrCodeModal.classList.add('hidden');
+});
+
 async function updateReservation(reservationId) {
   const apiUrl = `http://127.0.0.1:8000/api/reservations/${reservationId}`;
   const modalContent2 = document.querySelector('.modal-content-2');
@@ -97,6 +110,23 @@ async function updateReservation(reservationId) {
   }
 }
 
+function changeTab(evt, tabName) {
+  let i, tabcontent, tablinks;
+
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
 function addUpdateReservationListener() {
   const updateReservationButton = document.querySelector('#update-reservation-button');
   updateReservationButton.addEventListener('click', async () => {
@@ -120,6 +150,65 @@ function updateReservationDisplay(reservationId, updatedReservation) {
   reservationNumOfUsersElement.textContent = updatedReservation.num_of_users;
 }
 
+function handleFavoriteButtonClick(event) {
+  const clickedElement = event.target;
+  const favoriteButton = clickedElement.closest('.favorite-btn');
+
+  if (!favoriteButton) {
+    return;
+  }
+
+  const shopId = favoriteButton.dataset.shopId;
+
+  if (isUserLoggedIn) {
+    if (isProcessingFavorite) {
+      console.log('Already processing favorite, returning early');
+      return;
+    }
+
+    isProcessingFavorite = true;
+    toggleFavorite(shopId)
+      .finally(() => {
+        isProcessingFavorite = false;
+      });
+  } else {
+    window.location.href = '/login';
+  }
+}
+
+async function toggleFavorite(shopId) {
+  const favoriteButton = document.querySelector(`.favorite-btn[data-shop-id="${shopId}"]`);
+  favoriteButton.disabled = true;
+
+  const isFavorited = window.favorites.some(favorite => favorite.id === parseInt(shopId, 10));
+  const method = isFavorited ? 'DELETE' : 'POST';
+
+  try {
+    const response = await fetch('/favorite', {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ shop_id: shopId })
+    });
+
+    if (response.ok) {
+      const heartIcon = favoriteButton.querySelector('.fa-heart');
+      heartIcon.classList.toggle('text-red-500');
+      if (isFavorited) {
+        window.favorites = window.favorites.filter(favorite => favorite.id !== parseInt(shopId, 10));
+      } else {
+        window.favorites.push({ id: parseInt(shopId, 10) });
+      }
+    } else {
+      throw new Error('Error toggling the favorite status');
+    }
+  } finally {
+    favoriteButton.disabled = false;
+  }
+}
+
 function updateFavoriteButtons() {
   const favoriteButtons = document.querySelectorAll('.favorite-btn');
   favoriteButtons.forEach(button => {
@@ -134,7 +223,8 @@ function updateFavoriteButtons() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelector(".tablink").click();
   updateFavoriteButtons();
   addUpdateReservationListener();
 
@@ -143,6 +233,46 @@ document.addEventListener('DOMContentLoaded', () => {
     button.addEventListener('click', () => {
       const reservationId = button.getAttribute('data-reservation-id');
       updateModal(reservationId);
+    });
+  });
+
+  const openModalButton = document.querySelector('.open-modal-3');
+  if (openModalButton) {
+    openModalButton.addEventListener('click', function () {
+      const qrCodeModal = document.getElementById('qr-code-modal');
+      qrCodeModal.classList.remove('hidden');
+    });
+  }
+
+  const generateQrCodeButtons = document.querySelectorAll('.open-modal-3');
+  generateQrCodeButtons.forEach(button => {
+    button.addEventListener('click', function () {
+      const reservationId = this.getAttribute('data-reservation-id');
+      const url = `/shop-owner/reservation-detail/${reservationId}/qr-code`;
+
+      fetch(url)
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('QRコードの生成に失敗しました。');
+          }
+        })
+        .then(data => {
+          if (data.qr_code_url) {
+            const qrCodeImage = document.querySelector('#qr-code-image');
+            qrCodeImage.src = data.qr_code_url;
+            qrCodeImage.style.display = 'block';
+          } else {
+            console.error('QRコードのURLが見つかりません。');
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+
+      const qrCodeModal = document.getElementById('qr-code-modal');
+      qrCodeModal.classList.remove('hidden');
     });
   });
 });

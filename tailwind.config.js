@@ -1,7 +1,13 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
-    theme: {
+        theme: {
+            container: {
+            center: true,
+            padding: '1rem',
+            maxWidth: '1400px', 
+        },
+            
         extend: {
             boxShadow: {
             '3xl': '5px 5px 4px  rgba(0, 0, 0, 0.3)',

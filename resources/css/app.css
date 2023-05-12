@@ -176,3 +176,47 @@
   }
 }
 
+.tab {
+  width: full;
+}
+
+.tab-menu {
+  display: flex;
+}
+
+.tab-menu__item {
+  text-align: center;
+  padding: 10px 0;
+  cursor: pointer;
+  list-style: none;
+  width: 100px;
+  border-top: 1px solid #000;
+  border-left: 1px solid #000;
+  border-right: 1px solid #000;
+}
+
+.tab-menu__item:not(:first-child) {
+  border-left: none;
+}
+
+.tab-menu__item.active {
+  background: #3b82f6;
+  color: white;
+}
+
+.tab-content {
+  height: full;
+  border: 1px solid #000;
+}
+
+.tab-content__item {
+  display: none;
+}
+
+.tab-content__item.show {
+  display: block;
+}
+
+.shop-description {
+  word-wrap: break-word;
+}

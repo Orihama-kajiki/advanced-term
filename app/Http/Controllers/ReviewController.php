@@ -14,7 +14,7 @@ class ReviewController extends Controller
         $shops = Shop::all();
         $shop_id = $request->input('shop_id');
         $shop = Shop::find($shop_id);
-        return view('write_review', compact('shops', 'shop'));
+        return view('write-review', compact('shops', 'shop'));
     }
 
     public function store(Request $request)

@@ -63,7 +63,7 @@
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5">
           <span>点数</span>
         </div>
-          <form method="POST" action="{{ route('reviews.store') }}" class="h-2/3">
+          <form method="POST" action="{{ route('reviews.store') }}" class="h-2/3" novalidate>
             @csrf
             <input type="hidden" name="shop_id" value="{{ $shop->id }}">
             <div class="flex ml-5 mb-6">

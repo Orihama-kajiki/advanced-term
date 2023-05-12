@@ -70,6 +70,16 @@
         </form>
       </div>
     </header>
+    @if (Auth::check() && !Auth::user()->hasVerifiedEmail())
+    <div class="text-red-600 text-2xl">
+      認証してください。
+    </div>
+    @endif
+    @if (session('message'))
+    <div class="alert alert-success">
+      {{ session('message') }}
+    </div>
+    @endif
     <div id="search-results" class="grid grid-cols-1 lg:grid-cols-none gap-4">
     </div>
   </div>

@@ -8,6 +8,7 @@ use App\Models\Author;
 use App\Models\Shop;
 use App\Models\Area;
 use App\Models\Genre;
+use App\Models\CourseMenu;
 
 class ShopController extends Controller
 {
@@ -28,8 +29,7 @@ class ShopController extends Controller
     public function detail($shop_id)
     {
         $shop = Shop::find($shop_id);
-        return view('detail', ['shop' => $shop]);
+        $course_menus = CourseMenu::where('shop_id', $shop_id)->get();
+        return view('detail', compact('shop', 'course_menus'));
     }
-
-
 }

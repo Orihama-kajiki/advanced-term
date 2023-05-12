@@ -5,6 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rese</title>
+  <script src="https://js.stripe.com/v3/"></script>
   <script src="/js/jquery-3.6.4.min.js"></script>
   <script src="/js/jquery-ui-1.13.2.custom/jquery-ui.min.js"></script>
   <link rel="stylesheet" href="/css/reset.css" />
@@ -59,7 +60,7 @@
             <h3 class="text-lg font-bold">#{{ $shop->area->name }}</h3>
             <h3 class="text-lg font-bold">#{{ $shop->genre->name }}</h3>
           </div>
-          <div class="w-full h-20">
+          <div class="w-full h-20 shop-description">
             <h4 class="text-lg font-bold">{{ $shop->description }}</h4>
           </div>
         </div>
@@ -70,60 +71,94 @@
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5 ">
           <h5>予約</h5>
         </div>
-        <form method="POST" action="{{ route('reserve.store') }}">
-          @csrf
-          <input type="hidden" name="shop_id" value="{{ $shop->id }}">
-          <input type="hidden" name="user_id" value="{{ Auth::check() ? Auth::id() : '' }}">
-          <div class="relative flex ml-5 mb-4">
-            <input name="start_at" class="rounded-md h-8 pl-2 items-center font-bold pr-12" type="text" id="calendar" readonly>
-            <i class="fa-sharp fa-regular fa-calendar carender-icon text-black text-xl"></i>
+      <form method="POST" action="{{ route('reserve.store') }}" novalidate id="reservation-form">
+        @csrf
+        <input type="hidden" name="shop_id" value="{{ $shop->id }}">
+        <input type="hidden" name="start_at" id="start_at">
+        <input type="hidden" name="user_id" value="{{ Auth::check() ? Auth::id() : '' }}">
+        @if ($errors->has('start_at'))
+          <div class="text-red-500 text-sm ml-5">
+              {{ $errors->first('start_at') }}
           </div>
-          <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
-              <select name="time" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="time">
-                @for ($i = 11; $i <= 23; $i++)
-                  <option value="{{ $i }}:00">{{ $i }}:00</option>
-                  <option value="{{ $i }}:30">{{ $i }}:30</option>
-                @endfor
-              </select>
+        @endif
+        <div class="relative flex ml-5 mb-4">
+          <input name="start_at" class="rounded-md h-8 pl-2 items-center font-bold pr-12" type="text" id="calendar" placeholder="日付(必須)" readonly>
+          <i class="fa-sharp fa-regular fa-calendar carender-icon text-black text-xl"></i>
+        </div>
+        @if ($errors->has('time'))
+          <div class="text-red-500 text-sm ml-5">
+            {{ $errors->first('time') }}
           </div>
-          <div class="resavation_detail h-8 w-full ml-5 mb-5 pr-8">
-            <select name="num_of_users" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="number">
-                @for ($i = 1; $i <= 25; $i++)
-                    <option value="{{ $i }}">{{ $i }}人</option>
-                @endfor
-            </select>
+        @endif
+        <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
+          <select name="time" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="time">
+            <option value="" disabled selected>開始時間(必須)</option>
+            @for ($i = 11; $i <= 23; $i++)
+              <option value="{{ $i }}:00">{{ $i }}:00</option>
+              <option value="{{ $i }}:30">{{ $i }}:30</option>
+            @endfor
+          </select>
+        </div>
+        @if ($errors->has('num_of_users'))
+          <div class="text-red-500 text-sm ml-5">
+            {{ $errors->first('num_of_users') }}
           </div>
-          <div class="w-11/12 ml-5 px-3 py-5 border-blue-300 bg-blue-300 border-4 rounded-lg">
-            <table class="table-fixed font-bold text-white">
-              <tr>
-                <th class="block mr-5 text-left">Shop</th>
-                <td>{{ $shop->name }}</td>
-              </tr>
-              <tr>
-                <th class="block mr-5 text-left">Date</th>
-                <td><span id="selected-date"></span></td>
-              </tr>
-              <tr>
-                <th class="block mr-5 text-left">Time</th>
-                <td><span id="selected-time"></span></td>
-              </tr>
-              <tr>
-                <th class="block mr-5 text-left">Number</th>
-                <td><span id="selected-number"></span></td>
-              </tr>
-            </table>
+        @endif
+        <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
+          <select type="hidden" name="num_of_users" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="num_of_users">
+            <option value="" disabled selected>人数(必須)</option>
+            @for ($i = 1; $i <= 25; $i++)
+              <option value="{{ $i }}">{{ $i }}人</option>
+            @endfor
+          </select>
+        </div>
+        @if ($errors->has('course_menu_id'))
+          <div class="text-red-500 text-sm ml-5">
+            {{ $errors->first('course_menu_id') }}
           </div>
-          <div class="bg-blue-700 border-4 h-16 w-full bottom-0 rounded-lg absolute">
-            <button type="submit" id="reservation-form-btn"class="text-lg text-white text-center items-center w-full h-full" onclick="return {{ Auth::check() ? 'true' : 'alert(\'ログインが必要です。\')' }}">
-              <h6>予約する</h6>
-            </button>
-          </div>
-        </form>
+        @endif
+        <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
+          <select name="course_menu_id" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="course_menu_id">
+            <option value="">メニュー(任意)<span>*選択しない場合はそのままで結構です</span></option>
+            @foreach ($course_menus as $course_menu)
+              <option value="{{ $course_menu->id }}">{{ $course_menu->name }} (¥{{ number_format($course_menu->price) }})</option>
+            @endforeach
+          </select>
+        </div>
+        <div class="w-11/12 ml-5 px-3 py-5 border-blue-300 bg-blue-300 border-4 rounded-lg">
+          <table class="table-fixed font-bold text-white">
+            <tr>
+              <th class="block mr-5 text-left">Shop</th>
+              <td>{{ $shop->name }}</td>
+            </tr>
+            <tr>
+              <th class="block mr-5 text-left">Date</th>
+              <td><span id="selected-date"></span></td>
+            </tr>
+            <tr>
+              <th class="block mr-5 text-left">Time</th>
+              <td><span id="selected-time"></span></td>
+            </tr>
+            <tr>
+              <th class="block mr-5 text-left">Number</th>
+              <td><span id="selected-number"></span></td>
+            </tr>
+            <tr>
+              <th class="block mr-5 text-left">Course</th>
+              <td><span id="selected-course"></span></td>
+            </tr>
+          </table>
+        </div>
+        <div class="bg-blue-700 border-4 h-16 w-full bottom-0 rounded-lg absolute">
+          <input type="submit" id="reservation-form-btn" class="text-lg text-white text-center items-center w-full h-full" value="予約する">
+        </div>
+      </form>
       </div>
     </div>
   </div>
 <script>
-  $(document).ready(function() {
+const stripe = Stripe('{{ env('STRIPE_KEY') }}');
+$(document).ready(function() {
     $("#datepicker").datepicker();
   });
 </script>
