@@ -239,7 +239,7 @@
   </div>
 </div>
 
-  <!-- 予約詳細画面 -->
+<!-- 予約詳細画面 -->
 <div id="qr-code-modal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-40 flex items-center justify-center">
   <div class="modal-content z-50 bg-white flex items-center justify-center relative rounded-lg" style="width: 400px; height: 450px;">
       <img id="qr-code-image" src="" alt="QR Code" style="display:none;">

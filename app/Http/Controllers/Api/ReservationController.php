@@ -29,24 +29,19 @@ class ReservationController extends Controller
     return response()->json($reservation);
   }
 
-  public function store(Request $request)
+  public function store(ReservationRequest $request)
   {
-    $validator = Reservation::validate($request->all());
+      $start_at = $request->start_at . ' ' . $request->time;
 
-    if ($validator->fails()) {
-      return response()->json(['errors' => $validator->errors()], 400);
-    }
+      Reservation::createReservation(
+          $request->shop_id,
+          $request->user_id,
+          $request->num_of_users,
+          $start_at,
+          $request->course_menu_id
+      );
 
-    $start_at = $request->start_at . ' ' . $request->time;
-
-    $reservation = Reservation::createReservation(
-      $request->shop_id,
-      $request->user_id,
-      $request->num_of_users,
-      $start_at
-    );
-
-    return response()->json(['reservation' => $reservation], 201);
+      return redirect()->route('done');
   }
 
   public function update(Request $request, $id)
@@ -93,24 +88,31 @@ class ReservationController extends Controller
       try {
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
-        $checkout_session = Session::create([
-          'payment_method_types' => ['card'],
-          'line_items' => [[
-            'price_data' => [
-              'currency' => 'jpy',
-              'product_data' => [
-                'name' => 'Reservation',
-              ],
-              'unit_amount' => $course_menu->price, 
+      $checkout_session = Session::create([
+        'payment_method_types' => ['card'],
+        'line_items' => [[
+          'price_data' => [
+            'currency' => 'jpy',
+            'product_data' => [
+              'name' => 'Reservation',
             ],
-            'quantity' => $request->num_of_people, 
-          ]],
-          'mode' => 'payment',
-          'success_url' => route('done'),
-          'cancel_url' => route('shops.index'),
-        ]);
+            'unit_amount' => $course_menu->price, 
+          ],
+          'quantity' => $request->num_of_people, 
+        ]],
+        'mode' => 'payment',
+        'success_url' => route('done'),
+        'cancel_url' => route('shops.index'),
+        'metadata' => [
+          'shop_id' => $request->shop_id,
+          'user_id' => $request->user_id,
+          'num_of_users' => $request->num_of_people,
+          'start_at' => $request->start_at,
+          'course_menu_id' => $request->course_menu_id
+        ]
+      ]);
 
-        return response()->json(['url' => $checkout_session->url]);
+      return response()->json(['url' => $checkout_session->url]);
       } catch (\Exception $e) {
         return response()->json(['error' => $e->getMessage()]);
       }

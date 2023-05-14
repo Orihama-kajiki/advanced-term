@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Rese</title>
     <link rel="stylesheet" href="css/reset.css" />
@@ -48,31 +49,31 @@
         <h2 class="m-4 items-center text-xl text-white">Login</h2>
       </div>
       <div class="flex-grow flex justify-end items-center flex-col">
-        <form method="POST" action="{{ route('login') }}" class="flex w-full flex-col mt-10 px-6 pb-4" novalidate>
-          @csrf
-          @error('email')
-          <p class="text-sm text-red-600 pt-14">{{ $message }}</p>
-          @enderror
-          <div class="Email mb-6 flex items-center">
-            <i class="fas fa-envelope mr-2 text-2xl"></i>
-            <input id="email" type="email" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="email" placeholder="Email" required autofocus />
-          </div>
-          @error('password')
-          <p class="text-sm text-red-600">{{ $message }}</p>
-          @enderror
-          <div class="Password mb-10 flex items-center">
-            <i class="fas fa-lock mr-2 text-2xl"></i>
-            <input id="password" type="password" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="password" placeholder="Password" required />
-          </div>
-          <div class="flex items-center justify-end">
-            <button class="focus:shadow-outline rounded bg-blue-600 px-4 py-1 text-white hover:bg-blue-700 focus:outline-none" type="submit">ログイン</button>
-          </div>
-        </form>
+      <form id="login-form" class="flex w-full flex-col mt-10 px-6 pb-4" novalidate>
+        @csrf
+        @error('email')
+        <p class="text-sm text-red-600 pt-14">{{ $message }}</p>
+        @enderror
+        <div class="Email mb-6 flex items-center">
+          <i class="fas fa-envelope mr-2 text-2xl"></i>
+          <input id="email" type="email" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="email" placeholder="Email" required autofocus />
+        </div>
+        @error('password')
+        <p class="text-sm text-red-600">{{ $message }}</p>
+        @enderror
+        <div class="Password mb-10 flex items-center">
+          <i class="fas fa-lock mr-2 text-2xl"></i>
+          <input id="password" type="password" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="password" placeholder="Password" required />
+        </div>
+        <div class="flex items-center justify-end">
+          <button class="focus:shadow-outline rounded bg-blue-600 px-4 py-1 text-white hover:bg-blue-700 focus:outline-none" type="submit">ログイン</button>
+        </div>
+      </form>
       </div>
     </div>
   </div>
 </div>
     </div>
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/login.js') }}"></script>
   </body>
 </html>

@@ -22,7 +22,10 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return $this->authenticated($request, Auth::user());
+        $user = Auth::user();
+        $token = $user->createToken('token-name')->plainTextToken;
+
+        return response()->json(['token' => $token]);
     }
 
     public function destroy(Request $request)

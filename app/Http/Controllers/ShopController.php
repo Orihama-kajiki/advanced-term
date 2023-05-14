@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Author;
@@ -28,6 +29,7 @@ class ShopController extends Controller
 
     public function detail($shop_id)
     {
+        Log::info('Shop ID: ' . $shop_id);
         $shop = Shop::find($shop_id);
         $course_menus = CourseMenu::where('shop_id', $shop_id)->get();
         return view('detail', compact('shop', 'course_menus'));

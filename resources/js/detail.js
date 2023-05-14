@@ -81,30 +81,37 @@ document.getElementById("reservation-form-btn").addEventListener("click", async 
   console.log('Number of Users:', numOfUsers);
   console.log('Start At:', startAt);
   console.log('Course Menu ID:', courseMenuId);
+  console.log('Course Menu ID Type:', typeof courseMenuId);
   console.log('Shop ID:', shopId);
 
   setReservationValues(numOfUsers, startAt, courseMenuId);
   event.preventDefault();
 
   if (courseMenuId !== null) {
-    const response = await fetch('/api/create-checkout-session', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        course_menu_id: courseMenuId,
-        num_of_people: numOfUsers
-      })
-    });
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const response = await fetch('/api/create-checkout-session', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-CSRF-TOKEN': csrfToken
+  },
+  body: JSON.stringify({
+    shop_id: shopId,
+    user_id: userId,
+    num_of_users: numOfUsers,
+    start_at: startAt,
+    course_menu_id: courseMenuId,
+    num_of_people: numOfUsers
+  })
+});
 
-    const data = await response.json();
+  const data = await response.json();
 
-    if (data.error) {
-      alert(data.error);
-      return;
-    }
-    window.location.href = data.url;
+  if (data.error) {
+    alert(data.error);
+    return;
+  }
+  window.location.href = data.url;
   } else {
     document.getElementById("reservation-form").submit();
   }

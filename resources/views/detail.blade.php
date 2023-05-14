@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rese</title>
@@ -71,7 +72,7 @@
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5 ">
           <h5>予約</h5>
         </div>
-      <form method="POST" action="{{ route('reserve.store') }}" novalidate id="reservation-form">
+        <form novalidate id="reservation-form">
         @csrf
         <input type="hidden" name="shop_id" value="{{ $shop->id }}">
         <input type="hidden" name="start_at" id="start_at">
@@ -150,7 +151,7 @@
           </table>
         </div>
         <div class="bg-blue-700 border-4 h-16 w-full bottom-0 rounded-lg absolute">
-          <input type="submit" id="reservation-form-btn" class="text-lg text-white text-center items-center w-full h-full" value="予約する">
+          <button type="button" id="reservation-form-btn" class="text-lg text-white text-center items-center w-full h-full">予約する</button>
         </div>
       </form>
       </div>
