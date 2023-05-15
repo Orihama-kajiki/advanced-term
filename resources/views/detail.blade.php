@@ -72,7 +72,7 @@
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5 ">
           <h5>予約</h5>
         </div>
-        <form novalidate id="reservation-form">
+      <form novalidate id="reservation-form" action="/reservations" method="post">
         @csrf
         <input type="hidden" name="shop_id" value="{{ $shop->id }}">
         <input type="hidden" name="start_at" id="start_at">
