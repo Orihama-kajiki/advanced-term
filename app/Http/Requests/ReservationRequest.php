@@ -15,10 +15,12 @@ class ReservationRequest extends FormRequest
   public function rules()
   {
     return [
-      'num_of_users' => ['required', 'numeric', 'min:1'],
-      'start_at' => ['required', 'date'],
-      'time' => ['required'],
-      'course_menu_id' => ['nullable', 'exists:course_menus,id'],
+      'shop_id' => 'required|integer|exists:shops,id',
+      'user_id' => 'required|integer|exists:users,id',
+      'num_of_users' => 'required|integer',
+      'start_at' => 'required|date',
+      'time' => 'required|string',
+      'course_menu_id' => 'nullable|integer|exists:course_menus,id',
     ];
   }
 

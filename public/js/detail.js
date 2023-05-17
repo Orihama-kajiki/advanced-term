@@ -59,7 +59,7 @@ function setReservationValues(numOfUsers, startAt, courseMenuId) {
 }
 document.getElementById("reservation-form-btn").addEventListener("click", /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-    var userId, isAuthenticated, numOfUsers, selectedDate, selectedTime, startAt, courseMenuId, shopId, _csrfToken, response, data, token, _response, responseData;
+    var userId, isAuthenticated, numOfUsers, selectedDate, selectedTime, startAt, courseMenuId, shopId, _csrfToken, response, data;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -116,49 +116,15 @@ document.getElementById("reservation-form-btn").addEventListener("click", /*#__P
           return _context.abrupt("return");
         case 26:
           window.location.href = data.url;
-          _context.next = 46;
+          _context.next = 30;
           break;
         case 29:
-          event.preventDefault();
-          _context.prev = 30;
-          token = localStorage.getItem('authToken');
-          _context.next = 34;
-          return fetch('/api/reservations', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-TOKEN': csrfToken,
-              'Authorization': "Bearer ".concat(token)
-            },
-            body: JSON.stringify({
-              shop_id: shopId,
-              user_id: userId,
-              num_of_users: numOfUsers,
-              start_at: startAt,
-              course_menu_id: courseMenuId
-            }),
-            redirect: 'manual'
-          });
-        case 34:
-          _response = _context.sent;
-          console.log(_response.status); // HTTPステータスコード
-          console.log(_response.statusText); // ステータステキスト
-          console.log(_response.headers); // レスポンスヘッダー
-          _context.next = 40;
-          return _response.json();
-        case 40:
-          responseData = _context.sent;
-          _context.next = 46;
-          break;
-        case 43:
-          _context.prev = 43;
-          _context.t0 = _context["catch"](30);
-          console.error('Error:', _context.t0);
-        case 46:
+          document.getElementById('reservation-form').submit();
+        case 30:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[30, 43]]);
+    }, _callee);
   }));
   return function (_x) {
     return _ref.apply(this, arguments);

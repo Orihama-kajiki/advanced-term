@@ -105,37 +105,8 @@ document.getElementById("reservation-form-btn").addEventListener("click", async 
     return;
   }
   window.location.href = data.url;
-  } else {
-    event.preventDefault();
-
-    try {
-      const token = localStorage.getItem('authToken');
-      const response = await fetch('/api/reservations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-TOKEN': csrfToken,
-          'Authorization': `Bearer ${token}` 
-        },
-        body: JSON.stringify({
-          shop_id: shopId,
-          user_id: userId,
-          num_of_users: numOfUsers,
-          start_at: startAt,
-          course_menu_id: courseMenuId,
-        }),
-        redirect: 'manual'
-      });
-      
-      console.log(response.status);  // HTTPステータスコード
-      console.log(response.statusText);  // ステータステキスト
-      console.log(response.headers);  // レスポンスヘッダー
-
-      const responseData = await response.json(); 
-
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  }   else {
+    document.getElementById('reservation-form').submit();
   }
 });
 

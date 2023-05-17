@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ShopOwnerController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\EmailVerificationController;
@@ -46,6 +47,7 @@ Route::middleware(['auth', 'verified', 'checkRole:利用者'])->group(function (
   Route::post('/favorite', [FavoriteController::class, 'store'])->name('favorite.store');
   Route::get('reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
   Route::post('reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
+  Route::delete('/reservations/{id}', [ReservationController::class, 'delete'])->name('reserve.delete');
   Route::get('/done', function () {return view('done');})->name('done');
 });
 

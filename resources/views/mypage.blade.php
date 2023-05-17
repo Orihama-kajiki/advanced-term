@@ -46,8 +46,9 @@
                       <div class="bg-cover bg-center bg-no-repeat w-8 h-8" style="background-image: url('/img/clock.svg');"></div>
                       <h5 class="ml-12">予約{{ $index + 1 }}</h5>
                     </div>
-                    <form action="{{ route('reserve.delete') }}" method="post" class="inline">
+                    <form action="{{ route('reserve.delete', $reservation->id) }}" method="post" class="inline">
                       @csrf
+                      @method('DELETE')
                       <input type="hidden" id="reservation-id" name="reservation_id" value="{{ $reservation->id }}">
                       <button type="submit" class="rounded-full text-white text-3xl">
                         <i class="fa-regular fa-circle-xmark" style="color: #ffffff;"></i>

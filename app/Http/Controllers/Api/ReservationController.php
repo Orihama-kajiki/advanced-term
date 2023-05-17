@@ -32,20 +32,21 @@ class ReservationController extends Controller
 
   public function store(ReservationRequest $request)
   {
-    Log::info('storeMethod was called.');
-    Log::info('Request data:', $request->all());
-    $start_at = $request->start_at . ' ' . $request->time;
 
-    $reservationId = Reservation::createReservation(
-      $request->shop_id,
-      $request->user_id,
-      $request->num_of_users,
-      $start_at,
-      $request->course_menu_id
-    );
-    Log::info('Reservation ID: ' . $reservationId);
-    if ($reservationId) {
-      return response()->json(['reservation_id' => $reservationId], 200);
+    $start_at = $request->start_at; 
+
+    $reservation = Reservation::create([
+      'shop_id' => $request->shop_id,
+      'user_id' => $request->user_id,
+      'num_of_users' => $request->num_of_users,
+      'start_at' => $start_at,
+      'course_menu_id' => $request->course_menu_id
+    ]);
+
+    Log::info('Reservation ID: ' . $reservation->id);
+
+    if ($reservation->id) {
+      return redirect()->route('done'); 
     } else {
       return response()->json(['message' => 'Failed to create reservation'], 500);
     }
@@ -77,13 +78,6 @@ class ReservationController extends Controller
     $reservation->update($updateData);
 
     return response()->json(['message' => '予約が更新されました', 'reservation' => $reservation], 200);
-  }
-
-  public function delete(Request $request, Reservation $reservation)
-  {
-    $reservation->delete();
-
-    return response()->json(['message' => 'Reservation deleted successfully'], 200);
   }
 
   public function createCheckoutSession(Request $request)

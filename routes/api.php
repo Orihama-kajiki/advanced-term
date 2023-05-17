@@ -18,5 +18,4 @@ Route::middleware(['auth:sanctum', 'verified', 'checkRole:利用者'])->group(fu
 
 Route::get('/reservations/{id}', [ReservationController::class, 'show']);
 Route::put('/reservations/{id}', [ReservationController::class, 'update']);
-Route::delete('/reservations/{id}', [ReservationController::class, 'delete'])->name('reservations.delete');
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
