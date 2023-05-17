@@ -8,50 +8,55 @@ use Validator;
 
 class Reservation extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'shop_id',
-        'user_id',
-        'num_of_users',
-        'start_at',
-        'course_menu_id',
+  protected $fillable = [
+    'shop_id',
+    'user_id',
+    'num_of_users',
+    'start_at',
+    'course_menu_id',
+  ];
+
+  public function user()
+  {
+    return $this->belongsTo(User::class);
+  }
+
+  public function shop()
+  {
+    return $this->belongsTo(Shop::class);
+  }
+
+  public function course_menu()
+  {
+    return $this->belongsTo(CourseMenu::class);
+  }
+
+  public static function validate($data)
+  {
+    $rules = [
+      'num_of_users' => 'required|integer',
+      'start_at' => 'required|date',
+      'course_menu_id' => 'nullable|exists:course_menus,id',
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    return Validator::make($data, $rules);
+  }
 
-    public function shop()
-    {
-        return $this->belongsTo(Shop::class);
-    }
+  public static function createReservation($shop_id, $user_id, $num_of_users, $start_at, $course_menu_id)
+  {
+    $reservation = new self();
+    $reservation->shop_id = $shop_id;
+    $reservation->user_id = $user_id;
+    $reservation->num_of_users = $num_of_users;
+    $reservation->start_at = $start_at;
+    $reservation->course_menu_id = $course_menu_id;
 
-    public function course_menu()
-    {
-        return $this->belongsTo(CourseMenu::class);
+    if ($reservation->save()) {
+      return $reservation->id;
+    } else {
+      return false;
     }
-
-    public static function validate($data)
-    {
-        $rules = [
-            'num_of_users' => 'required|integer',
-            'start_at' => 'required|date',
-            'course_menu_id' => 'nullable|exists:course_menus,id',
-        ];
-
-        return Validator::make($data, $rules);
-    }
-
-    public static function createReservation($shop_id, $user_id, $num_of_users, $start_at, $course_menu_id)
-    {
-        $reservation = new self();
-        $reservation->shop_id = $shop_id;
-        $reservation->user_id = $user_id;
-        $reservation->num_of_users = $num_of_users;
-        $reservation->start_at = $start_at;
-        $reservation->course_menu_id = $course_menu_id;
-        $reservation->save();
-    }
+  }
 }

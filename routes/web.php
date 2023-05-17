@@ -46,10 +46,7 @@ Route::middleware(['auth', 'verified', 'checkRole:利用者'])->group(function (
   Route::post('/favorite', [FavoriteController::class, 'store'])->name('favorite.store');
   Route::get('reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
   Route::post('reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
-  Route::post('/reserve', [ReservationController::class, 'store'])->name('reserve.store');
-  Route::get('/done', function () {
-      return view('done');})->name('done');
-  Route::post('/reserve/delete', [ReservationController::class, 'delete'])->name('reserve.delete');
+  Route::get('/done', function () {return view('done');})->name('done');
 });
 
 Route::middleware(['auth', 'checkRole:管理者'])->group(function () {

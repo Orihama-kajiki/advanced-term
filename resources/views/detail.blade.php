@@ -72,8 +72,7 @@
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5 ">
           <h5>予約</h5>
         </div>
-      <form novalidate id="reservation-form" action="/reservations" method="post">
-        @csrf
+      <form novalidate id="reservation-form">
         <input type="hidden" name="shop_id" value="{{ $shop->id }}">
         <input type="hidden" name="start_at" id="start_at">
         <input type="hidden" name="user_id" value="{{ Auth::check() ? Auth::id() : '' }}">
@@ -83,7 +82,7 @@
           </div>
         @endif
         <div class="relative flex ml-5 mb-4">
-          <input name="start_at" class="rounded-md h-8 pl-2 items-center font-bold pr-12" type="text" id="calendar" placeholder="日付(必須)" readonly>
+          <input class="rounded-md h-8 pl-2 items-center font-bold pr-12" type="text" id="calendar" placeholder="日付(必須)" readonly>
           <i class="fa-sharp fa-regular fa-calendar carender-icon text-black text-xl"></i>
         </div>
         @if ($errors->has('time'))
@@ -106,7 +105,7 @@
           </div>
         @endif
         <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
-          <select type="hidden" name="num_of_users" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="num_of_users">
+          <select name="num_of_users" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="num_of_users">
             <option value="" disabled selected>人数(必須)</option>
             @for ($i = 1; $i <= 25; $i++)
               <option value="{{ $i }}">{{ $i }}人</option>

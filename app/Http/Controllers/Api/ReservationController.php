@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Reservation;
 use App\Models\CourseMenu;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ReservationRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,17 +32,23 @@ class ReservationController extends Controller
 
   public function store(ReservationRequest $request)
   {
-      $start_at = $request->start_at . ' ' . $request->time;
+    Log::info('storeMethod was called.');
+    Log::info('Request data:', $request->all());
+    $start_at = $request->start_at . ' ' . $request->time;
 
-      Reservation::createReservation(
-          $request->shop_id,
-          $request->user_id,
-          $request->num_of_users,
-          $start_at,
-          $request->course_menu_id
-      );
-
-      return redirect()->route('done');
+    $reservationId = Reservation::createReservation(
+      $request->shop_id,
+      $request->user_id,
+      $request->num_of_users,
+      $start_at,
+      $request->course_menu_id
+    );
+    Log::info('Reservation ID: ' . $reservationId);
+    if ($reservationId) {
+      return response()->json(['reservation_id' => $reservationId], 200);
+    } else {
+      return response()->json(['message' => 'Failed to create reservation'], 500);
+    }
   }
 
   public function update(Request $request, $id)
@@ -98,7 +105,7 @@ class ReservationController extends Controller
             ],
             'unit_amount' => $course_menu->price, 
           ],
-          'quantity' => $request->num_of_people, 
+          'quantity' => $request->num_of_users, 
         ]],
         'mode' => 'payment',
         'success_url' => route('done'),
@@ -106,7 +113,7 @@ class ReservationController extends Controller
         'metadata' => [
           'shop_id' => $request->shop_id,
           'user_id' => $request->user_id,
-          'num_of_users' => $request->num_of_people,
+          'num_of_users' => $request->num_of_users,
           'start_at' => $request->start_at,
           'course_menu_id' => $request->course_menu_id
         ]

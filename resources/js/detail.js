@@ -1,5 +1,6 @@
 const visibleElements = $(".some-class:visible");
 const menuBtn = document.querySelector('.menu-btn');
+let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
 $(document).ready(function () {
   $("#calendar").datepicker({
@@ -77,33 +78,25 @@ document.getElementById("reservation-form-btn").addEventListener("click", async 
   const courseMenuId = document.querySelector("select[name='course_menu_id']").value;
   const shopId = document.querySelector("input[name='shop_id']").value;
 
-  console.log('User ID:', userId);
-  console.log('Number of Users:', numOfUsers);
-  console.log('Start At:', startAt);
-  console.log('Course Menu ID:', courseMenuId);
-  console.log('Course Menu ID Type:', typeof courseMenuId);
-  console.log('Shop ID:', shopId);
-
   setReservationValues(numOfUsers, startAt, courseMenuId);
   event.preventDefault();
 
-  if (courseMenuId !== null) {
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-const response = await fetch('/api/create-checkout-session', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'X-CSRF-TOKEN': csrfToken
-  },
-  body: JSON.stringify({
-    shop_id: shopId,
-    user_id: userId,
-    num_of_users: numOfUsers,
-    start_at: startAt,
-    course_menu_id: courseMenuId,
-    num_of_people: numOfUsers
-  })
-});
+  if (courseMenuId) {
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  const response = await fetch('/api/create-checkout-session', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': csrfToken
+    },
+    body: JSON.stringify({
+      shop_id: shopId,
+      user_id: userId,
+      num_of_users: numOfUsers,
+      start_at: startAt,
+      course_menu_id: courseMenuId,
+    })
+  });
 
   const data = await response.json();
 
@@ -113,7 +106,36 @@ const response = await fetch('/api/create-checkout-session', {
   }
   window.location.href = data.url;
   } else {
-    document.getElementById("reservation-form").submit();
+    event.preventDefault();
+
+    try {
+      const token = localStorage.getItem('authToken');
+      const response = await fetch('/api/reservations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': csrfToken,
+          'Authorization': `Bearer ${token}` 
+        },
+        body: JSON.stringify({
+          shop_id: shopId,
+          user_id: userId,
+          num_of_users: numOfUsers,
+          start_at: startAt,
+          course_menu_id: courseMenuId,
+        }),
+        redirect: 'manual'
+      });
+      
+      console.log(response.status);  // HTTPステータスコード
+      console.log(response.statusText);  // ステータステキスト
+      console.log(response.headers);  // レスポンスヘッダー
+
+      const responseData = await response.json(); 
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
 });
 
