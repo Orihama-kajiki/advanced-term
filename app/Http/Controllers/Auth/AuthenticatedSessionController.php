@@ -11,45 +11,42 @@ use Illuminate\Support\Facades\Auth;
 class AuthenticatedSessionController extends Controller
 {
 
-    public function create()
-    {
-        return view('auth.login');
-    }
+  public function create()
+  {
+    return view('auth.login');
+  }
 
-    public function store(LoginRequest $request)
-    {
-        $request->authenticate();
+public function store(LoginRequest $request)
+{
+  $request->authenticate();
 
-        $request->session()->regenerate();
+  $request->session()->regenerate();
 
-        $user = Auth::user();
-        $token = $user->createToken('token-name')->plainTextToken;
+  $user = Auth::user();
+  $token = $user->createToken('token-name')->plainTextToken;
 
-        return response()->json(['token' => $token]);
-    }
+  $redirectUrl = '/';
+  if ($user->hasRole('管理者')) {
+    $redirectUrl = route('admin.index');
+  } else if ($user->hasRole('店舗責任者')) {
+    $redirectUrl = route('owner.index');
+  } else {
+    $redirectUrl = route('shops.index');
+  }
 
-    public function destroy(Request $request)
-    {
-        Auth::guard('web')->logout();
+  return response()->json([
+    'token' => $token,
+    'redirectUrl' => $redirectUrl
+  ]);
+}
 
-        $request->session()->invalidate();
+  public function destroy(Request $request)
+  {
+    Auth::guard('web')->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-    }
-
-    protected function authenticated(Request $request, $user)
-    {
-        if ($user->hasRole('管理者')) {
-            return redirect()->route('admin.index');
-        }
-
-        if ($user->hasRole('店舗責任者')) {
-            return redirect()->route('owner.index');
-        }
-
-        return redirect()->route('shops.index');
-    }
+    return redirect('/');
+  }
 
 }

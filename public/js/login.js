@@ -16,9 +16,8 @@ document.getElementById('login-form').addEventListener('submit', function (event
   })
     .then(response => response.json())
     .then(data => {
-        localStorage.setItem('authToken', data.token);
-
-        window.location.href = '/';
+      localStorage.setItem('authToken', data.token);
+      window.location.href = data.redirectUrl;
     })
     .catch((error) => {
         console.error('Error:', error);

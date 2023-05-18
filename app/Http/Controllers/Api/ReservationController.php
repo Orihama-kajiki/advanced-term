@@ -10,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Validator;
-use Illuminate\Support\Facades\Log; 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
@@ -42,8 +41,6 @@ class ReservationController extends Controller
       'start_at' => $start_at,
       'course_menu_id' => $request->course_menu_id
     ]);
-
-    Log::info('Reservation ID: ' . $reservation->id);
 
     if ($reservation->id) {
       return redirect()->route('done'); 
@@ -103,7 +100,7 @@ class ReservationController extends Controller
         ]],
         'mode' => 'payment',
         'success_url' => route('done'),
-        'cancel_url' => route('shops.index'),
+        'cancel_url' => route('payment.cancel'),
         'metadata' => [
           'shop_id' => $request->shop_id,
           'user_id' => $request->user_id,

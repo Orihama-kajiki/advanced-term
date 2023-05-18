@@ -32,4 +32,10 @@ class ShopController extends Controller
     $course_menus = CourseMenu::where('shop_id', $shop_id)->get();
     return view('detail', compact('shop', 'course_menus'));
   }
+
+  public function cancelPayment() {
+  session()->flash('message', '支払いがキャンセルされました');
+  return redirect()->route('shops.index');
+  }
+
 }

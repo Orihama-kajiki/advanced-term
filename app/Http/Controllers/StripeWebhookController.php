@@ -26,7 +26,6 @@ class StripeWebhookController extends Controller
         }
         return response()->json(['status' => 'success']);
     } catch (\Exception $e) {
-      \Log::error('Error handling Stripe webhook: '.$e->getMessage());
       return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
     }
   }
