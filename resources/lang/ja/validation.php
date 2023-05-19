@@ -144,6 +144,10 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+        ],        
+
+        'password' => [
+            'confirmed' => 'パスワードとパスワード（確認）が一致していません。',
         ],
     ],
 
@@ -159,8 +163,12 @@ return [
     */
 
     'attributes' => [
+        'name' => 'ユーザー名',
         'email' => 'メールアドレス',
         'password' => 'パスワード',
+        'password_confirmation' => 'パスワード(確認)',
+        'subject' => 'メール件名',
+        'message' => 'メール本文',
     ],
 
 ];

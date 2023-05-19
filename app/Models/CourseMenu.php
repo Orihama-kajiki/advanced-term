@@ -7,13 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseMenu extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'shop_id',
-        'name',
-        'price',
-        'description',
-    ];
+  protected $fillable = [
+    'shop_id',
+    'name',
+    'price',
+    'description',
+  ];
+
+  public function shop()
+  {
+    return $this->belongsTo(Shop::class);
+  }
 }
 

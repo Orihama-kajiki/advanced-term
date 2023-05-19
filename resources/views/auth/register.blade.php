@@ -54,21 +54,21 @@
               @enderror
               <div class="Name mb-2 flex items-center">
                 <i class="fas fa-user mr-2 h-8 w-8"></i>
-                <input id="name" type="text" class="w-full appearance-none border-b-2 border-gray-400 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="name" placeholder="Username" required />
+                <input id="name" type="text" class="w-full appearance-none border-b-2 border-gray-400 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="name" placeholder="Username"/>
               </div>
               @error('email')
               <p class="text-red-500 text-xs">{{ $message }}</p>
               @enderror
               <div class="Email mb-2 flex items-center">
                 <i class="fas fa-envelope mr-2 h-8 w-8"></i>
-                <input id="email" type="email" class="w-full appearance-none border-b-2 border-gray-400 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="email" placeholder="Email" required />
+                <input id="email" type="email" class="w-full appearance-none border-b-2 border-gray-400 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="email" placeholder="Email"/>
               </div>
               @error('password')
               <p class="text-red-500 text-xs">{{ $message }}</p>
               @enderror
               <div class="Password mb-6 flex items-center">
                 <i class="fas fa-lock mr-2 h-8 w-8"></i>
-                <input id="password" type="password" class="w-full appearance-none border-b-2 border-gray-400 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="password" placeholder="Password" required />
+                <input id="password" type="password" class="w-full appearance-none border-b-2 border-gray-400 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="password" placeholder="Password"/>
               </div>
               <div class="flex items-center justify-end">
                 <button class="focus:shadow-outline rounded bg-blue-600 px-4 py-1 text-white hover:bg-blue-700 focus:outline-none" type="submit">登録</button>

@@ -18,11 +18,16 @@
 </header>
 <main>
   <div class="container mx-auto py-8">
+    @if (session('success'))
+      <div class="alert text-center alert-success">
+        {{ session('success') }}
+      </div>
+    @endif
     <h2 class="text-3xl font-bold text-center my-8 pb-8">管理画面</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
       <a href="{{ route('admin.create-account') }}" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center">ユーザー管理</a>
-      <a href="#" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center">ショップ管理</a>
       <a href="{{ route('admin.create-email') }}" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center">一斉メール送信</a>
+      <a href="#" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center" onclick="return confirm('Comming Soon...')">ショップ管理</a>
     </div>
   </div>
 </main>

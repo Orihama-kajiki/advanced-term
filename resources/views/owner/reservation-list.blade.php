@@ -18,6 +18,11 @@
     </header>
     <main>
       <div class="tab container mx-auto px-8 lg:px-12">
+      @if (session('success'))
+        <div class="alert alert-success">
+          {{ session('success') }}
+        </div>
+      @endif
         <ul class="tab-menu">
           <!-- タブはJavaScriptで動的に生成 -->
         </ul>

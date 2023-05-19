@@ -56,14 +56,14 @@
         @enderror
         <div class="Email mb-6 flex items-center">
           <i class="fas fa-envelope mr-2 text-2xl"></i>
-          <input id="email" type="email" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="email" placeholder="Email" required autofocus />
+          <input id="email" type="email" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="email" placeholder="Email" autofocus/>
         </div>
         @error('password')
         <p class="text-sm text-red-600">{{ $message }}</p>
         @enderror
         <div class="Password mb-10 flex items-center">
           <i class="fas fa-lock mr-2 text-2xl"></i>
-          <input id="password" type="password" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="password" placeholder="Password" required />
+          <input id="password" type="password" class="w-full appearance-none border-b-2 border-gray-400 py-2 leading-tight text-gray-700 focus:border-blue-600 focus:outline-none" name="password" placeholder="Password"/>
         </div>
         <div class="flex items-center justify-end">
           <button class="focus:shadow-outline rounded bg-blue-600 px-4 py-1 text-white hover:bg-blue-700 focus:outline-none" type="submit">ログイン</button>

@@ -48,8 +48,8 @@ class AdminController extends Controller
   public function sendEmail(Request $request)
   {
     $request->validate([
-        'subject' => 'required',
-        'message' => 'required',
+      'subject' => 'required',
+      'message' => 'required',
     ]);
 
     $subject = $request->input('subject');
@@ -58,7 +58,7 @@ class AdminController extends Controller
     $users = User::all();
 
     foreach ($users as $user) {
-        $user->notify(new AdminEmail($subject, $message));
+      $user->notify(new AdminEmail($subject, $message));
     }
 
     return redirect()->back()->with('success', 'メールが送信されました');

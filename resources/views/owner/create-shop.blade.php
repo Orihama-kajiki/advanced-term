@@ -18,6 +18,11 @@
     </header>
     <main>
       <div class="tab container mx-auto px-8 lg:px-12">
+      @if (session('success'))
+        <div class="alert alert-success">
+          {{ session('success') }}
+        </div>
+      @endif
         <ul class="tab-menu">
           <li class="tab-menu__item active font-bold">店舗作成</li>
           <li class="tab-menu__item font-bold">店舗編集</li>
@@ -35,16 +40,16 @@
                 @error('name')
                   <span class="text-red-600 text-base">{{ $message }}</span>
                 @enderror
-                <div>
+                <div class="mb-2">
                   <label for="name" class="block text-base">店舗名</label>
                   <input type="text" name="name" id="name" class="w-1/4 text-base" required />
                 </div>
                 @error('area_id')
                   <span class="text-red-600 text-base">{{ $message }}</span>
                 @enderror
-                <div>
+                <div class="mb-2">
                   <label for="area_id" class="block text-base">都道府県</label>
-                  <select name="area_id" id="area_id" class="w-1/4 text-base" required>
+                  <select name="area_id" id="area_id" class="w-1/6 text-base" required>
                     <option value="">選択してください</option>
                     @foreach($areas as $area)
                     <option value="{{ $area->id }}">{{ $area->name }}</option>
@@ -54,18 +59,36 @@
                 @error('genre_id')
                   <span class="text-red-600 text-base">{{ $message }}</span>
                 @enderror
-                <div>
+                <div class="mb-4">
                   <label for="genre_id" class="block text-base">ジャンル</label>
-                  <select name="genre_id" id="genre_id" class="w-1/4 text-base" required>
+                  <select name="genre_id" id="genre_id" class="w-1/6 text-base">
                     <option value="">選択してください</option>
                     @foreach($genres as $genre)
                     <option value="{{ $genre->id }}">{{ $genre->name }}</option>
                     @endforeach
                   </select>
                 </div>
+                <div id="course_menus" class="mb-2">
+                  <label class="block text-base">コース･要予約メニュー(任意)</label>
+                  <div class="course_menu">
+                    <div class="flex mb-2">
+                      <label for="course_name_1" class="block text-base">名前:</label>
+                      <input type="text" name="course_name[]" id="course_name_1" class="w-1/4"/>
+                    </div>
+                    <div class="flex mb-1">
+                      <label for="course_price_1" class="block text-base">価格:</label>
+                      <input type="text" name="course_price[]" id="course_price_1" class="w-1/4"/>
+                    </div>
+                    <div class="mb-4">
+                      <label for="course_description_1" class="block text-base">説明</label>
+                      <textarea name="course_description[]" id="course_description_1" class="w-full text-base resize-none" rows="5"></textarea>
+                    </div>
+                  </div>
+                  <button type="button" id="add_course_menu" class="border border-black px-2">追加</button>
+                </div>
                 <div>
                   <label for="description" class="block text-base">店舗概要</label>
-                  <textarea name="description" id="description" class="w-full text-base resize-none" rows="5" required></textarea>
+                  <textarea name="description" id="description" class="w-full text-base resize-none" rows="5"></textarea>
                   @error('description')
                     <span class="text-red-600 text-base">{{ $message }}</span>
                   @enderror
@@ -83,6 +106,7 @@
               </form>
             </div>
           </div>
+
           <div class="tab-content__item">
             @if(count($shops) > 0)
             <table class="table-auto w-full">

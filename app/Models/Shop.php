@@ -40,7 +40,10 @@ class Shop extends Model
         return $this->hasMany(Review::class);
     }
 
-
+    public function courseMenus()
+    {
+        return $this->hasMany(CourseMenu::class);
+    }
 }
 
 

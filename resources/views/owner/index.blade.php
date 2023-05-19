@@ -23,7 +23,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <a href="{{ route('owner.create-shop') }}" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center">店舗管理</a>
         <a href="{{ route('owner.reservation-list') }}" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center">予約管理</a>
-        <a href="#" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center">メッセージを送る</a>
+        <a href="#" class="bg-blue-500 text-white font-bold py-3 px-4 rounded block text-center" onclick="return confirm('Comming Soon...')">メッセージを送る</a>
       </div>
     </div>
   </main>

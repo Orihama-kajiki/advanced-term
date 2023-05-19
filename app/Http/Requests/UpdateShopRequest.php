@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateShopRequest extends FormRequest
+class UpdateShopRequest extends FormRequest
 {
   public function authorize()
   {
@@ -18,7 +18,7 @@ class CreateShopRequest extends FormRequest
       'area_id' => 'required|integer|exists:areas,id',
       'genre_id' => 'required|integer|exists:genres,id',
       'description' => 'required|string|max:150',
-      'image_url' => 'required|file|image|mimes:jpeg,gif|max:2048',
+      'image_url' => 'sometimes|file|image|mimes:jpeg,gif|max:2048',
       'course_name.*' => 'nullable|string|max:255',
       'course_price.*' => 'nullable|integer',
       'course_description.*' => 'nullable|string|max:255',
@@ -40,7 +40,6 @@ class CreateShopRequest extends FormRequest
       'description.required' => '店舗概要は必須です。',
       'description.string' => '店舗概要は文字列で入力してください。',
       'description.max' => '店舗概要は150文字以内で入力してください。',
-      'image_url.required' => '店舗画像は必須です。',
       'image_url.file' => '店舗画像はファイルでアップロードしてください。',
       'image_url.image' => '店舗画像は画像ファイルでアップロードしてください。',
       'image_url.mimes' => '店舗画像は｢.jpeg｣または｢.gif｣形式のファイルをアップロードしてください。',

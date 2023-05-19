@@ -18,16 +18,31 @@
 <main>
 <div class="container mx-auto mt-8">
   <h2 class="mb-8 text-center text-3xl font-bold">一斉送信メール作成</h2>
+  @if (session('success'))
+    <div class="alert text-center alert-success">
+      {{ session('success') }}
+    </div>
+  @endif
   <div class="mx-auto w-full max-w-lg">
     <form action="{{ route('admin.send-email') }}" method="POST">
       @csrf
       <div class="mb-4">
-        <label for="subject">件名:</label>
-        <input type="text" name="subject" id="subject" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:shadow-outline" required>
+        <div class="flex items-center">
+          <label for="subject">件名</label>
+          @error('subject')
+            <div class="text-red-500 ml-2">{{ $message }}</div>
+          @enderror
+        </div>
+        <input type="text" name="subject" id="subject" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:shadow-outline">
       </div>
       <div>
-        <label for="message">本文:</label>
-        <textarea name="message" id="message" rows="10" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:shadow-outline" required></textarea>
+        <div class="flex items-center">
+          <label for="message">本文</label>
+          @error('message')
+            <div class="text-red-500 ml-2">{{ $message }}</div>
+          @enderror
+        </div>
+        <textarea name="message" id="message" rows="10" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:shadow-outline" ></textarea>
       </div>
       <div class="flex items-center justify-end">
         <button type="submit" class="focus:shadow-outline rounded bg-blue-500 px-4 py-2 font-bold text-white focus:outline-none" onclick="return confirm('送信してもよろしいでしょうか？')">送信</button>
