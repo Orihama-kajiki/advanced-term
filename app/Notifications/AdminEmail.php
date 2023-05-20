@@ -9,26 +9,26 @@ use Illuminate\Notifications\Messages\MailMessage;
 
 class AdminEmail extends Notification implements ShouldQueue
 {
-    use Queueable;
+  use Queueable;
 
-    protected $subject;
-    protected $message;
+  protected $subject;
+  protected $message;
 
-    public function __construct($subject, $message)
-    {
-        $this->subject = $subject;
-        $this->message = $message;
-    }
+  public function __construct($subject, $message)
+  {
+    $this->subject = $subject;
+    $this->message = $message;
+  }
 
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->subject($this->subject)
-            ->line($this->message);
-    }
+  public function toMail($notifiable)
+  {
+    return (new MailMessage)
+      ->subject($this->subject)
+      ->line($this->message);
+  }
 
-    public function via($notifiable)
-    {
-        return ['mail'];
-    }
+  public function via($notifiable)
+  {
+    return ['mail'];
+  }
 }

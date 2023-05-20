@@ -48,35 +48,7 @@ class ReservationController extends Controller
       return response()->json(['message' => 'Failed to create reservation'], 500);
     }
   }
-
-  public function update(Request $request, $id)
-  {
-    $request_data = $request->all();
-    $request_data['start_at'] = $request_data['datetime'];
-    unset($request_data['datetime']); 
-
-    $validator = Reservation::validate($request_data);
-
-    if ($validator->fails()) {
-      return response()->json(['errors' => $validator->errors()], 422);
-    }
-
-    $reservation = Reservation::find($id);
-
-    if (!$reservation) {
-      return response()->json(['message' => '予約が見つかりませんでした'], 404);
-    }
-
-    $utcDateTime = Carbon::createFromFormat('Y-m-d\TH:i:s.u\Z', $request_data['start_at'], 'UTC');
-    $tokyoDateTime = $utcDateTime->setTimezone('Asia/Tokyo');
-    $start_at = $tokyoDateTime->format('Y-m-d H:i:s');
-
-    $updateData = array_merge($request_data, ['start_at' => $start_at]);
-    $reservation->update($updateData);
-
-    return response()->json(['message' => '予約が更新されました', 'reservation' => $reservation], 200);
-  }
-
+  
   public function createCheckoutSession(Request $request)
   {
     $course_menu_id = $request->input('course_menu_id');

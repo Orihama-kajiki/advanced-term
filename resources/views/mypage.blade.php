@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0-beta2/css/all.css">
 </head>
 <body class="bg-gray-100" data-is-user-logged-in="{{ Auth::check() ? 'true' : 'false' }}">
+  <!-- メイン -->
   <div class="w-screen h-screen px-20 pt-10 pb-6">
     <div class="relative w-full">
       <div class="flex">
@@ -30,11 +31,14 @@
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-2 w-full gap-8">
       <div class="col-span-1 lg:col-span-1">
+
+      <!-- タブメニュー -->
         <div class="flex">
           <button class="tablink bg-blue-600 text-white font-semibold text-2xl px-4 py-2 rounded mr-4 hover:bg-blue-200" onclick="changeTab(event, 'current-reservations')">予約状況</button>
           <button class="tablink bg-blue-600 text-white font-semibold text-2xl px-4 py-2 rounded hover:bg-blue-200" onclick="changeTab(event, 'past-reservations')">予約履歴</button>
         </div>
 
+      <!-- 予約状況 -->
         <div id="current-reservations" class="tabcontent">
           <div class="col-span-1 lg:col-span-1">
           @forelse ($reservations as $index => $reservation)
@@ -163,7 +167,7 @@
                 </div>
                 <div class="flex items-center mt-2 text-gray-700">
                   <a href="/detail/{{ $shop->id }}" class="bg-blue-600 text-white px-5 py-1 rounded-lg tracking-widest text-base">詳しくみる</a>
-                  <button class="favorite-btn text-3xl text-gray-200 ml-auto p-2" data-shop-id="{{ $shop->id }}">
+                  <button class="favorite-btn text-3xl text-gray-200 ml-auto p-2" data-shop-id="{{ $shop->id }}" onclick="toggleFavorite({{ $shop->id }})">
                     <i class="fa fa-heart"></i>
                   </button>
                 </div>
@@ -175,80 +179,79 @@
     </div>
   </div>
 
-<!-- ここからモーダルウィンドウ -->
+  <!-- ここからモーダルウィンドウ -->
 
-<!-- Menu -->
-<div class="fixed inset-0 bg-white z-20 modal-bg1 hidden">
-  <div class="fixed inset-0 flex items-center justify-center z-30 modal-content1 hidden">
-    <div class="bg-white text-center">
-      <ul class="menu">
-        <li class="menu__item px-4 py-2"><a href="/">Home</a></li>
-        @guest
-        <li class="menu__item px-4 py-2"><a href="{{ route('register') }}">Registration</a></li>
-        <li class="menu__item px-4 py-2"><a href="{{ route('login') }}">Login</a></li>
-        @else
-        <li class="menu__item px-4 py-2"><a href="{{ route('mypage') }}">Mypage</a></li>
-        <li class="menu__item px-4 py-2">
-          <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit">Logout</button>
-          </form>
-        </li>
-        @endguest
-      </ul>
+  <!-- Menu -->
+  <div class="fixed inset-0 bg-white z-20 modal-bg1 hidden">
+    <div class="fixed inset-0 flex items-center justify-center z-30 modal-content1 hidden">
+      <div class="bg-white text-center">
+        <ul class="menu">
+          <li class="menu__item px-4 py-2"><a href="/">Home</a></li>
+          @guest
+          <li class="menu__item px-4 py-2"><a href="{{ route('register') }}">Registration</a></li>
+          <li class="menu__item px-4 py-2"><a href="{{ route('login') }}">Login</a></li>
+          @else
+          <li class="menu__item px-4 py-2"><a href="{{ route('mypage') }}">Mypage</a></li>
+          <li class="menu__item px-4 py-2">
+            <form method="POST" action="{{ route('logout') }}">
+              @csrf
+              <button type="submit">Logout</button>
+            </form>
+          </li>
+          @endguest
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- 予約編集画面 -->
-<div class="modal-bg-2 fixed inset-0 bg-gray-500 bg-opacity-50 z-40 hidden"></div>
-<div class="modal-content-2 fixed inset-0 z-50 items-center justify-center flex hidden">
-  <div class="h-96 w-80 mx-auto bg-white rounded-md overflow-hidden">
-    <form id="update-reservation-form" onsubmit="return false;">
-      @csrf
-      <div class="bg-blue-600 px-4 py-3">
-        <h3 class="text-lg font-medium text-white">予約情報を更新する</h3>
-      </div>
-      <div class="h-full px-4 pt-3">
-        <label for="num_of_users" class="block font-medium text-gray-700 mb-2">人数</label>
-      @if(isset($reservation))
-        <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="{{ $reservation->num_of_users }}">
-      @else
-        <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="">
-      @endif
-        <label for="time" class="block font-medium text-gray-700 mb-2">時間</label>
-        <select name="time" id="time" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600">
-        @for ($i = 11; $i <= 22; $i++)
-          <option value="{{ $i }}:00">{{ $i }}:00</option>
-          <option value="{{ $i }}:30">{{ $i }}:30</option>
-        @endfor
-        </select>
-        <label for="datepicker" class="block font-medium text-gray-700 mb-2">日程</label>
-        <input type="text" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-6 focus:outline-none focus:ring-blue-600 focus:border-blue-600" name="datepicker" id="datepicker" readonly>
-        <div class="flex justify-between">
-          <button type="button" class="cancel-btn bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded mr-2">
-            キャンセル
-          </button>
-        @if(isset($reservation))
-          <button class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded" id="update-reservation-button" onclick="updateModal({{ $reservation->id }})">
-            更新
-          </button>
-        @endif
+  <!-- 予約編集画面 -->
+  <div class="modal-bg-2 fixed inset-0 bg-gray-500 bg-opacity-50 z-40 hidden"></div>
+  <div class="modal-content-2 fixed inset-0 z-50 items-center justify-center flex hidden">
+    <div class="h-96 w-80 mx-auto bg-white rounded-md overflow-hidden">
+      <form id="update-reservation-form" action="{{ route('reserve.update', $reservation) }}" method="POST">
+        @csrf
+        <div class="bg-blue-600 px-4 py-3">
+          <h3 class="text-lg font-medium text-white">予約情報を更新する</h3>
         </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-<!-- 予約詳細画面 -->
-<div id="qr-code-modal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-40 flex items-center justify-center">
-  <div class="modal-content z-50 bg-white flex items-center justify-center relative rounded-lg" style="width: 400px; height: 450px;">
-      <img id="qr-code-image" src="" alt="QR Code" style="display:none;">
-      <button id="close-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute bottom-4 right-4">Close</button>
+        <div class="h-full px-4 pt-3">
+          <label for="num_of_users" class="block font-medium text-gray-700 mb-2">人数</label>
+        @if(isset($reservation))
+          <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="{{ $reservation->num_of_users }}">
+        @else
+          <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="">
+        @endif
+          <label for="time" class="block font-medium text-gray-700 mb-2">時間</label>
+          <select name="time" id="time" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600">
+          @for ($i = 11; $i <= 22; $i++)
+            <option value="{{ $i }}:00">{{ $i }}:00</option>
+            <option value="{{ $i }}:30">{{ $i }}:30</option>
+          @endfor
+          </select>
+          <label for="datepicker" class="block font-medium text-gray-700 mb-2">日程</label>
+          <input type="text" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-6 focus:outline-none focus:ring-blue-600 focus:border-blue-600" name="datepicker" id="datepicker" readonly>
+          <div class="flex justify-between">
+            <button type="button" class="cancel-btn bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded mr-2">
+              キャンセル
+            </button>
+          @if(isset($reservation))
+            <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
+                更新
+            </button>
+          @endif
+          </div>
+        </div>
+      </form>
     </div>
   </div>
-</div>
 
+  <!-- 予約詳細画面 -->
+  <div id="qr-code-modal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-40 flex items-center justify-center">
+    <div class="modal-content z-50 bg-white flex items-center justify-center relative rounded-lg" style="width: 400px; height: 450px;">
+        <img id="qr-code-image" src="" alt="QR Code" style="display:none;">
+        <button id="close-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute bottom-4 right-4">Close</button>
+      </div>
+    </div>
+  </div>
 
   <!-- script -->
 	<script>

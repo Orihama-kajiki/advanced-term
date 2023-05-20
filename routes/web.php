@@ -49,6 +49,7 @@ Route::middleware(['auth', 'verified', 'checkRole:利用者'])->group(function (
   Route::post('reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
   Route::delete('/reservations/{id}', [ReservationController::class, 'delete'])->name('reserve.delete');
   Route::get('/done', function () {return view('done');})->name('done');
+  Route::post('/reservations/{id}', [ReservationController::class, 'update'])->name('reserve.update');
   Route::get('/payment/cancel', [ShopController::class, 'cancelPayment'])->name('payment.cancel');
 });
 

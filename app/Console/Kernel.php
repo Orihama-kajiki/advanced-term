@@ -10,21 +10,21 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
-    protected function schedule(Schedule $schedule)
-    {
-        $schedule->call(function () {
-            $reservations = Reservation::whereDate('start_at', now()->startOfDay())->get();
+  protected function schedule(Schedule $schedule)
+  {
+    $schedule->call(function () {
+      $reservations = Reservation::whereDate('start_at', now()->startOfDay())->get();
 
-            foreach ($reservations as $reservation) {
-                Mail::to($reservation->user->email)->send(new ReservationReminder($reservation));
-            }
-        })->everyMinute();
-    }
+      foreach ($reservations as $reservation) {
+        Mail::to($reservation->user->email)->send(new ReservationReminder($reservation));
+      }
+    })->everyMinute();
+  }
 
-    protected function commands()
-    {
-        $this->load(__DIR__.'/Commands');
+  protected function commands()
+  {
+    $this->load(__DIR__.'/Commands');
 
-        require base_path('routes/console.php');
-    }
+    require base_path('routes/console.php');
+  }
 }
