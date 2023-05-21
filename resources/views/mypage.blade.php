@@ -155,25 +155,8 @@
       <!-- お気に入り一覧 -->
       <div class="col-span-1">
         <h5 class="text-3xl font-extrabold pt-16 pb-3 lg:pt-0">お気に入り店舗</h5>
-        <div class="grid grid-cols-1 gap-4 w-full mb-8 mt-4 rounded-lg md:grid-cols-2">
-          @foreach ($favoriteShops as $shop)
-            <div class="bg-white rounded-lg overflow-hidden shadow-3xl">
-              <img src="{{ $shop->image_url }}" class="w-full h-48 object-cover object-center">
-              <div class="p-4">
-                <h3 class="text-lg font-bold text-gray-900">{{ $shop->name }}</h3>
-                <div class="flex items-center mt-2 text-gray-700">
-                  <span class="text-sm font-bold">#{{ $shop->area->name }}</span>
-                  <span class="text-sm font-bold">#{{ $shop->genre->name }}</span>
-                </div>
-                <div class="flex items-center mt-2 text-gray-700">
-                  <a href="/detail/{{ $shop->id }}" class="bg-blue-600 text-white px-5 py-1 rounded-lg tracking-widest text-base">詳しくみる</a>
-                  <button class="favorite-btn text-3xl text-gray-200 ml-auto p-2" data-shop-id="{{ $shop->id }}" onclick="toggleFavorite({{ $shop->id }})">
-                    <i class="fa fa-heart"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          @endforeach
+        <div id="favorites" class="grid grid-cols-1 gap-4 w-full mb-8 mt-4 rounded-lg md:grid-cols-2">
+          <!-- JavaScriptがお気に入り店舗の情報をここに挿入します -->
         </div>
       </div>
     </div>
