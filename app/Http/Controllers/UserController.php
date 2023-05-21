@@ -8,6 +8,7 @@ use App\Models\Shop;
 use App\Models\Area;
 use App\Models\Genre;
 use App\Models\Reservation;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,7 +21,9 @@ class UserController extends Controller
         $reservations = $user->reservations()->where('start_at', '>=', $now)->with('shop')->get();
         $pastReservations = $user->reservations()->where('start_at', '<', $now)->with('shop')->get();
         $favoriteShops = $user->favorites;
-        return view('mypage', compact('reservations', 'pastReservations', 'favoriteShops'));
+        $reviews = $user->reviews()->get();
+
+        return view('mypage', compact('reservations', 'pastReservations', 'favoriteShops', 'reviews'));
     }
 
     public function finish()

@@ -1,15 +1,18 @@
 const menuBtn = document.querySelector('.menu-btn');
 const modalBg1 = document.querySelector('.modal-bg1');
+const modalContent1 = document.querySelector('.modal-content1');
 const modalBg2 = document.querySelector('.modal-bg-2');
+const modalContent2 = document.querySelector('.modal-content-2');
 const updateBtns = document.querySelectorAll('.update-btn');
 const cancelButton = document.querySelector('.cancel-btn');
 const formElement = document.querySelector('#update-reservation-form');
 const numOfUsersInput = document.querySelector('#num_of_users');
 const timeSelect = document.querySelector('#time');
+const qrCodeModal = document.getElementById('qr-code-modal');
+const qrCodeImage = document.querySelector('#qr-code-image');
+const favoritesDiv = document.getElementById('favorites');
 
 window.toggleMenuModal = function () {
-  const modalContent1 = document.querySelector('.modal-content1');
-
   modalBg1.classList.toggle('hidden');
   modalContent1.classList.toggle('hidden');
   menuBtn.classList.toggle('menu-open');
@@ -18,13 +21,11 @@ window.toggleMenuModal = function () {
 let openModalButton = document.querySelector('.open-modal-3');
 if (openModalButton) {
     openModalButton.addEventListener('click', function() {
-        const qrCodeModal = document.getElementById('qr-code-modal');
-        qrCodeModal.classList.remove('hidden');
+      qrCodeModal.classList.remove('hidden');
     });
 }
 
 document.getElementById('close-modal').addEventListener('click', function() {
-    const qrCodeModal = document.getElementById('qr-code-modal');
     qrCodeModal.classList.add('hidden');
 });
 
@@ -78,13 +79,13 @@ document.querySelector('#update-reservation-form').addEventListener('submit', fu
   console.log(`Frontend time value: ${timeValue}`);
 });
 
+cancelButton.addEventListener('click', function () {
+  modalBg2.classList.add('hidden');
+  modalContent2.classList.add('hidden');
+});
+
 window.updateModal = async function (reservationId) {
-  const formElement = document.querySelector('#update-reservation-form');
   formElement.setAttribute('action', `/reservations/${reservationId}`);
-  const modalBg2 = document.querySelector('.modal-bg-2');
-  const modalContent2 = document.querySelector('.modal-content-2');
-  const numOfUsersInput = document.querySelector('#num_of_users');
-  const timeSelect = document.querySelector('#time');
 
   try {
     const response = await fetch(`/api/reservations/${reservationId}`, {
@@ -118,8 +119,6 @@ window.updateModal = async function (reservationId) {
 }
 
 function updateFavorites() {
-  const favoritesDiv = document.getElementById('favorites');
-
   while (favoritesDiv.firstChild) {
     favoritesDiv.removeChild(favoritesDiv.firstChild);
   }
@@ -231,7 +230,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const openModalButton = document.querySelector('.open-modal-3');
   if (openModalButton) {
     openModalButton.addEventListener('click', function () {
-      const qrCodeModal = document.getElementById('qr-code-modal');
       qrCodeModal.classList.remove('hidden');
     });
   }
@@ -252,7 +250,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(data => {
           if (data.qr_code_url) {
-            const qrCodeImage = document.querySelector('#qr-code-image');
             qrCodeImage.src = data.qr_code_url;
             qrCodeImage.style.display = 'block';
           } else {
@@ -263,7 +260,6 @@ document.addEventListener("DOMContentLoaded", function () {
           console.error(error);
         });
 
-      const qrCodeModal = document.getElementById('qr-code-modal');
       qrCodeModal.classList.remove('hidden');
     });
   });

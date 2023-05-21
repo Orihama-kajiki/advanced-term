@@ -32,14 +32,17 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 w-full gap-8">
       <div class="col-span-1 lg:col-span-1">
 
-      <!-- タブメニュー -->
+        <!-- タブメニュー -->
         <div class="flex">
           <button class="tablink bg-blue-600 text-white font-semibold text-2xl px-4 py-2 rounded mr-4 hover:bg-blue-200" onclick="changeTab(event, 'current-reservations')">予約状況</button>
-          <button class="tablink bg-blue-600 text-white font-semibold text-2xl px-4 py-2 rounded hover:bg-blue-200" onclick="changeTab(event, 'past-reservations')">予約履歴</button>
+          <button class="tablink bg-blue-600 text-white font-semibold text-2xl px-4 py-2 rounded mr-4 hover:bg-blue-200" onclick="changeTab(event, 'past-reservations')">予約履歴</button>
+          <button class="tablink bg-blue-600 text-white font-semibold text-2xl px-4 py-2 rounded hover:bg-blue-200" onclick="changeTab(event, 'past-reviews')">レビュー履歴</button>
         </div>
 
-      <!-- 予約状況 -->
+        <!-- タブコンテンツ -->
         <div id="current-reservations" class="tabcontent">
+
+          <!-- 予約状況 -->
           <div class="col-span-1 lg:col-span-1">
           @forelse ($reservations as $index => $reservation)
             <div class="my-12 w-full lg:w-4/5">
@@ -102,7 +105,7 @@
           </div> 
         </div>
 
-      <!-- 予約履歴 -->
+        <!-- 予約履歴 -->
         <div id="past-reservations" class="tabcontent">
           @forelse ($pastReservations as $index => $reservation)
             <div class="my-12 w-full lg:w-4/5">
@@ -150,6 +153,24 @@
             </div>
           @endforelse
         </div>
+
+        <!-- レビュー履歴 -->
+        <div id="past-reviews" class="tabcontent">
+          @foreach($reviews as $review)
+            <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
+              <div class="flex justify-between items-center">
+                <h2 class="text-xl font-bold">{{ $review->shop->name }}</h2>
+                <div class="flex">
+                  @for($i = 0; $i < $review->rating; $i++)
+                    <span class="text-yellow-500">★</span>
+                  @endfor
+                </div>
+              </div>
+              <p class="mt-2">{{ $review->comment }}</p>
+            </div>
+          @endforeach
+        </div>
+
       </div>
       
       <!-- お気に入り一覧 -->
@@ -197,12 +218,8 @@
           <h3 class="text-lg font-medium text-white">予約情報を更新する</h3>
         </div>
         <div class="h-full px-4 pt-3">
-          <label for="num_of_users" class="block font-medium text-gray-700 mb-2">人数</label>
-        @if(isset($reservation))
-          <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="{{ $reservation->num_of_users }}">
-        @else
-          <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="">
-        @endif
+          <label for="datepicker" class="block font-medium text-gray-700 mb-2">日程</label>
+          <input type="text" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-6 focus:outline-none focus:ring-blue-600 focus:border-blue-600" name="datepicker" id="datepicker" readonly>
           <label for="time" class="block font-medium text-gray-700 mb-2">時間</label>
           <select name="time" id="time" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600">
           @for ($i = 11; $i <= 22; $i++)
@@ -210,17 +227,21 @@
             <option value="{{ $i }}:30">{{ $i }}:30</option>
           @endfor
           </select>
-          <label for="datepicker" class="block font-medium text-gray-700 mb-2">日程</label>
-          <input type="text" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-6 focus:outline-none focus:ring-blue-600 focus:border-blue-600" name="datepicker" id="datepicker" readonly>
+          <label for="num_of_users" class="block font-medium text-gray-700 mb-2">人数</label>
+          @if(isset($reservation))
+            <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="{{ $reservation->num_of_users }}">
+          @else
+            <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="">
+          @endif
           <div class="flex justify-between">
             <button type="button" class="cancel-btn bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded mr-2">
               キャンセル
             </button>
-          @if(isset($reservation))
-            <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
+            @if(isset($reservation))
+              <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">
                 更新
-            </button>
-          @endif
+              </button>
+            @endif
           </div>
         </div>
       </form>
@@ -228,7 +249,7 @@
   </div>
 
   <!-- 予約詳細画面 -->
-  <div id="qr-code-modal" class="modal hidden fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-40 flex items-center justify-center">
+  <div id="qr-code-modal" class="modal fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 z-40 flex hidden items-center justify-center">
     <div class="modal-content z-50 bg-white flex items-center justify-center relative rounded-lg" style="width: 400px; height: 450px;">
         <img id="qr-code-image" src="" alt="QR Code" style="display:none;">
         <button id="close-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded absolute bottom-4 right-4">Close</button>
