@@ -14,7 +14,6 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.0.0-beta2/css/all.css">
 </head>
 <body class="bg-gray-100" data-is-user-logged-in="{{ Auth::check() ? 'true' : 'false' }}">
-  <!-- メイン -->
   <div class="w-screen h-screen px-20 pt-10 pb-6">
     <div class="relative w-full">
       <div class="flex">

@@ -8,6 +8,7 @@ use App\Models\Author;
 use App\Models\Shop;
 use App\Models\Area;
 use App\Models\Genre;
+use App\Models\Review;
 use App\Models\CourseMenu;
 
 class ShopController extends Controller
@@ -30,7 +31,9 @@ class ShopController extends Controller
   {
     $shop = Shop::find($shop_id);
     $course_menus = CourseMenu::where('shop_id', $shop_id)->get();
-    return view('detail', compact('shop', 'course_menus'));
+    $reviews = $shop->reviews()->get();
+
+    return view('detail', compact('shop', 'course_menus', 'reviews'));
   }
 
   public function cancelPayment() {

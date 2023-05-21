@@ -16,7 +16,9 @@
 </head>
 <body class="detail-page bg-gray-100 w-screen min-h-screen">
   <div class="flex bg-gray-100 w-screen flex-grow px-20 pt-10 pb-6 flex-col md:flex-row">
-    <div class="md:flex-1 w-full md:w-auto pb-20">
+
+    <!-- 左側 -->
+    <div class="md:flex-1 w-full md:w-auto pb-20 overflow-y-auto">
       <div class="grid grid-cols-1 w-full md:pr-10">
         <div id="app-js" class="relative">
           <div class="flex">
@@ -48,112 +50,150 @@
               </div>
             </div>
           </div>
-          <div class="pt-16 relative">
-            <div class="flex">
-              <a href="/" class="arrow_btn cursor-pointer h-10 w-10 mr-6 absolute left-0 bg-white rounded-lg shadow-3xl"></a>
-              <h2 class="text-4xl font-extrabold ml-14 text-center">{{ $shop->name }}</h2>
-            </div>
-          </div>
-          <div class="w-full h-96 my-8">
-            <img src="{{ $shop->image_url }}" alt="店舗画像" class="w-full h-full object-cover object-center">
-          </div>
-          <div class="flex items-center mb-5">
-            <h3 class="text-lg font-bold">#{{ $shop->area->name }}</h3>
-            <h3 class="text-lg font-bold">#{{ $shop->genre->name }}</h3>
-          </div>
-          <div class="w-full h-20 shop-description">
-            <h4 class="text-lg font-bold">{{ $shop->description }}</h4>
+
+        <!-- 店舗情報部分 -->
+        <div class="pt-16 relative">
+          <div class="flex">
+            <a href="/" class="arrow_btn cursor-pointer h-10 w-10 mr-6 absolute left-0 bg-white rounded-lg shadow-3xl"></a>
+            <h2 class="text-4xl font-extrabold ml-14 text-center">{{ $shop->name }}</h2>
           </div>
         </div>
-      </div>
+        <div class="w-full h-96 my-8">
+          <img src="{{ $shop->image_url }}" alt="店舗画像" class="w-full h-full object-cover object-center">
+        </div>
+        <div class="flex items-center mb-5">
+          <h3 class="text-lg font-bold">#{{ $shop->area->name }}</h3>
+          <h3 class="text-lg font-bold">#{{ $shop->genre->name }}</h3>
+        </div>
+        <div class="w-full h-24 shop-description mb-12">
+          <h4 class="text-lg font-bold">{{ $shop->description }}</h4>
+        </div>
+        <div class="mt-10">
+          <h5 class="text-xl lg:text-3xl font-bold mb-4">お店のレビュー</h5>
+          @foreach ($shop->reviews as $review)
+            <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
+              <div class="block flex justify-between items-center">
+                <h4 class="text-lg font-bold">{{ $review->user->name }}</h4>
+                <div class="flex">
+                  @for ($i = 0; $i < $review->rating; $i++)
+                    <span class="text-yellow-500">★</span>
+                  @endfor
+                </div>
+              </div>
+              <p class="mt-2">{{ $review->comment }}</p>
+            </div>
+          @endforeach
+        </div>
 
-    <div class="md:flex-1 md:pl-10 w-full md:w-auto">
+      </div>
+    </div>
+
+    <!-- 右側 -->
+    <div class="md:flex-1 md:pl-10 w-full md:w-auto position-sticky top-0">
       <div class="box-content border-blue-600 bg-blue-600 min-h-full w-full rounded-lg relative shadow-3xl pb-20">
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5 ">
-          <h5>予約</h5>
+          <h6>予約</h6>
         </div>
-      <form novalidate id="reservation-form" action="/api/reservations" method="POST">
-        @csrf
-        <input type="hidden" name="shop_id" value="{{ $shop->id }}">
-        <input type="hidden" name="start_at" id="start_at">
-        <input type="hidden" name="user_id" value="{{ Auth::check() ? Auth::id() : '' }}">
-        @if ($errors->has('start_at'))
-          <div class="text-red-500 text-sm ml-5">
-              {{ $errors->first('start_at') }}
+
+        <!-- 予約入力・確認部分 -->
+        <form novalidate id="reservation-form" action="/api/reservations" method="POST">
+          @csrf
+          <input type="hidden" name="shop_id" value="{{ $shop->id }}">
+          <input type="hidden" name="start_at" id="start_at">
+          <input type="hidden" name="user_id" value="{{ Auth::check() ? Auth::id() : '' }}">
+          @if ($errors->has('start_at'))
+            <div class="text-red-500 text-sm ml-5">
+                {{ $errors->first('start_at') }}
+            </div>
+          @endif
+          <div class="relative flex ml-5 mb-4">
+            <input class="rounded-md h-8 pl-2 items-center font-bold pr-12" type="text" id="calendar" placeholder="日付(必須)" readonly>
+            <i class="fa-sharp fa-regular fa-calendar carender-icon text-black text-xl"></i>
           </div>
-        @endif
-        <div class="relative flex ml-5 mb-4">
-          <input class="rounded-md h-8 pl-2 items-center font-bold pr-12" type="text" id="calendar" placeholder="日付(必須)" readonly>
-          <i class="fa-sharp fa-regular fa-calendar carender-icon text-black text-xl"></i>
-        </div>
-        @if ($errors->has('time'))
-          <div class="text-red-500 text-sm ml-5">
-            {{ $errors->first('time') }}
+          @if ($errors->has('time'))
+            <div class="text-red-500 text-sm ml-5">
+              {{ $errors->first('time') }}
+            </div>
+          @endif
+          <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
+            <select name="time" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="time">
+              <option value="" disabled selected>開始時間(必須)</option>
+              @for ($i = 11; $i <= 23; $i++)
+                <option value="{{ $i }}:00">{{ $i }}:00</option>
+                <option value="{{ $i }}:30">{{ $i }}:30</option>
+              @endfor
+            </select>
           </div>
-        @endif
-        <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
-          <select name="time" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="time">
-            <option value="" disabled selected>開始時間(必須)</option>
-            @for ($i = 11; $i <= 23; $i++)
-              <option value="{{ $i }}:00">{{ $i }}:00</option>
-              <option value="{{ $i }}:30">{{ $i }}:30</option>
-            @endfor
-          </select>
-        </div>
-        @if ($errors->has('num_of_users'))
-          <div class="text-red-500 text-sm ml-5">
-            {{ $errors->first('num_of_users') }}
+          @if ($errors->has('num_of_users'))
+            <div class="text-red-500 text-sm ml-5">
+              {{ $errors->first('num_of_users') }}
+            </div>
+          @endif
+          <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
+            <select name="num_of_users" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="num_of_users">
+              <option value="" disabled selected>人数(必須)</option>
+              @for ($i = 1; $i <= 25; $i++)
+                <option value="{{ $i }}">{{ $i }}人</option>
+              @endfor
+            </select>
           </div>
-        @endif
-        <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
-          <select name="num_of_users" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="num_of_users">
-            <option value="" disabled selected>人数(必須)</option>
-            @for ($i = 1; $i <= 25; $i++)
-              <option value="{{ $i }}">{{ $i }}人</option>
-            @endfor
-          </select>
-        </div>
-        @if ($errors->has('course_menu_id'))
-          <div class="text-red-500 text-sm ml-5">
-            {{ $errors->first('course_menu_id') }}
+          @if ($errors->has('course_menu_id'))
+            <div class="text-red-500 text-sm ml-5">
+              {{ $errors->first('course_menu_id') }}
+            </div>
+          @endif
+          <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
+            <select name="course_menu_id" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="course_menu_id">
+              <option value="">メニュー(任意)<span>*選択しない場合はそのままで結構です</span></option>
+              @foreach ($course_menus as $course_menu)
+                <option value="{{ $course_menu->id }}">{{ $course_menu->name }} (¥{{ number_format($course_menu->price) }})</option>
+              @endforeach
+            </select>
           </div>
+          <div class="w-11/12 ml-5 px-3 py-5 border-blue-300 bg-blue-300 border-4 rounded-lg">
+            <table class="table-fixed font-bold text-white">
+              <tr>
+                <th class="block mr-5 text-left">Shop</th>
+                <td>{{ $shop->name }}</td>
+              </tr>
+              <tr>
+                <th class="block mr-5 text-left">Date</th>
+                <td><span id="selected-date"></span></td>
+              </tr>
+              <tr>
+                <th class="block mr-5 text-left">Time</th>
+                <td><span id="selected-time"></span></td>
+              </tr>
+              <tr>
+                <th class="block mr-5 text-left">Number</th>
+                <td><span id="selected-number"></span></td>
+              </tr>
+              <tr>
+                <th class="block mr-5 text-left">Course</th>
+                <td><span id="selected-course"></span></td>
+              </tr>
+            </table>
+          </div>
+          <div class="bg-blue-700 border-4 h-16 w-full bottom-0 rounded-lg absolute">
+            <button type="button" id="reservation-form-btn" class="text-lg text-white text-center items-center w-full h-full">予約する</button>
+          </div>
+        </form>
+
+        <!-- コース料理説明 -->
+        <div class="mx-5">
+        @if($course_menus)
+          @foreach($course_menus as $course_menu)
+          <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
+            <div class="block flex justify-between items-center">
+              <h4 class="text-lg font-bold">{{ $course_menu->name }}</h4>
+              <p class="text-lg">{{ number_format($course_menu->price) }}円</p>
+            </div>
+            <p class="mt-2">{{ $course_menu->description }}</p>
+          </div>
+          @endforeach
         @endif
-        <div class="resavation_detail h-8 w-full ml-5 mb-4 pr-8">
-          <select name="course_menu_id" class="w-11/12 h-full pl-2 rounded-md font-bold items-center focus:outline-none appearance-none" id="course_menu_id">
-            <option value="">メニュー(任意)<span>*選択しない場合はそのままで結構です</span></option>
-            @foreach ($course_menus as $course_menu)
-              <option value="{{ $course_menu->id }}">{{ $course_menu->name }} (¥{{ number_format($course_menu->price) }})</option>
-            @endforeach
-          </select>
         </div>
-        <div class="w-11/12 ml-5 px-3 py-5 border-blue-300 bg-blue-300 border-4 rounded-lg">
-          <table class="table-fixed font-bold text-white">
-            <tr>
-              <th class="block mr-5 text-left">Shop</th>
-              <td>{{ $shop->name }}</td>
-            </tr>
-            <tr>
-              <th class="block mr-5 text-left">Date</th>
-              <td><span id="selected-date"></span></td>
-            </tr>
-            <tr>
-              <th class="block mr-5 text-left">Time</th>
-              <td><span id="selected-time"></span></td>
-            </tr>
-            <tr>
-              <th class="block mr-5 text-left">Number</th>
-              <td><span id="selected-number"></span></td>
-            </tr>
-            <tr>
-              <th class="block mr-5 text-left">Course</th>
-              <td><span id="selected-course"></span></td>
-            </tr>
-          </table>
-        </div>
-        <div class="bg-blue-700 border-4 h-16 w-full bottom-0 rounded-lg absolute">
-          <button type="button" id="reservation-form-btn" class="text-lg text-white text-center items-center w-full h-full">予約する</button>
-        </div>
-      </form>
+
       </div>
     </div>
   </div>
