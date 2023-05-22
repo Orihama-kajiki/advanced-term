@@ -15,7 +15,6 @@ class RolesAndPermissionsSeeder extends Seeder
      */
     public function run()
     {
-        // 権限を作成
         $permissions = [
             'user_create',
             'user_edit',
@@ -35,7 +34,6 @@ class RolesAndPermissionsSeeder extends Seeder
             Permission::create(['name' => $permission]);
         }
 
-        // ロールを作成し、権限を割り当て
         $adminRole = Role::create(['name' => '管理者']);
         $adminRole->syncPermissions($permissions);
 

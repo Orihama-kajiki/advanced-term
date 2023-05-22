@@ -7,7 +7,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
     <title>店舗代表者作成画面</title>
   </head>
-  <body class="min-h-screen bg-gray-100">
+  <body id="create-shop-page" class="min-h-screen bg-gray-100">
     <header class="py-10">
       <div class="container mx-auto flex items-center justify-between px-8 lg:px-12">
         <h1 class="text-5xl font-extrabold text-blue-600"><span class="bg-blue-600 px-2 text-5xl font-extrabold text-white">Y</span>Rese</h1>
@@ -68,7 +68,7 @@
                     @endforeach
                   </select>
                 </div>
-                <div id="course_menus" class="mb-2">
+                <div class="course_menu" data-id="{{ $courseMenu->id }}">
                   <label class="block text-base">コース･要予約メニュー(任意)</label>
                   <div class="course_menu">
                     <div class="flex mb-2">

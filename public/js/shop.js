@@ -24,6 +24,38 @@ if (addCourseMenuButton !== null) {
   });
 }
 
+if (document.querySelector('body#create-shop-page')) {
+    document.querySelectorAll('.delete_course_menu').forEach((button) => {
+        button.addEventListener('click', function () {
+            const courseMenuElement = button.parentElement;
+            courseMenuElement.remove();
+        });
+    });
+} else if (document.querySelector('body#edit-shop-page')) {
+    let deletedCourseMenuIds = [];
+  
+    document.querySelectorAll('.delete_course_menu').forEach((button) => {
+        button.addEventListener('click', function () {
+            const courseMenuElement = button.parentElement;
+            const courseMenuId = courseMenuElement.getAttribute('data-id');
+
+            if (courseMenuId) {
+                deletedCourseMenuIds.push(courseMenuId);
+            }
+
+            courseMenuElement.remove();
+        });
+    });
+
+    document.querySelector('form').addEventListener('submit', function (e) {
+      const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'deleted_course_menu_ids';
+        input.value = JSON.stringify(deletedCourseMenuIds);
+        this.appendChild(input);
+    });
+}
+
 const tabs = document.getElementsByClassName('tab-menu__item');
 for (let i = 0; i < tabs.length; i++) {
   tabs[i].addEventListener('click', tabSwitch);

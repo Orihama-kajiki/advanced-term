@@ -154,11 +154,22 @@ public function update(UpdateShopRequest $request, $id)
     $course_prices = $request->input('course_price');
     $course_descriptions = $request->input('course_description');
 
-    foreach ($shop->courseMenus as $index => $courseMenu) {
-        $courseMenu->name = $course_names[$index];
+    foreach ($course_names as $index => $course_name) {
+      if ($index < count($shop->courseMenus)) {
+        $courseMenu = $shop->courseMenus[$index];
+        $courseMenu->name = $course_name;
         $courseMenu->price = $course_prices[$index];
         $courseMenu->description = $course_descriptions[$index];
         $courseMenu->save();
+      } else {
+        $courseMenu = new CourseMenu();
+        $courseMenu->shop_id = $shop->id;
+        $courseMenu->name = $course_name;
+        $courseMenu->price = $course_prices[$index];
+        $courseMenu->description = $course_descriptions[$index];
+        $courseMenu->save();
+      }
+
     }
 
     return redirect()->route('owner.create-shop')->with('success', '店舗情報を更新しました');

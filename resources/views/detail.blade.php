@@ -14,11 +14,11 @@
   <link rel="stylesheet" href="/js/jquery-ui-1.13.2.custom/jquery-ui.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
-<body class="detail-page bg-gray-100 w-screen min-h-screen">
-  <div class="flex bg-gray-100 w-screen flex-grow px-20 pt-10 pb-6 flex-col md:flex-row">
+<body class="detail-page bg-gray-100 w-screen h-screen md:flex md:flex-col">
+  <div class="flex w-screen flex-grow overflow-hidden px-20 pt-10 pb-6 flex-col md:flex-row">
 
     <!-- 左側 -->
-    <div class="md:flex-1 w-full md:w-auto pb-20 overflow-y-auto">
+    <div class="md:flex-1 md:pl-10 md:pb-0 pb-10 w-full md:w-auto">
       <div class="grid grid-cols-1 w-full md:pr-10">
         <div id="app-js" class="relative">
           <div class="flex">
@@ -61,36 +61,38 @@
         <div class="w-full h-96 my-8">
           <img src="{{ $shop->image_url }}" alt="店舗画像" class="w-full h-full object-cover object-center">
         </div>
-        <div class="flex items-center mb-5">
-          <h3 class="text-lg font-bold">#{{ $shop->area->name }}</h3>
-          <h3 class="text-lg font-bold">#{{ $shop->genre->name }}</h3>
-        </div>
-        <div class="w-full h-24 shop-description mb-12">
-          <h4 class="text-lg font-bold">{{ $shop->description }}</h4>
-        </div>
-        <div class="mt-10">
-          <h5 class="text-xl lg:text-3xl font-bold mb-4">お店のレビュー</h5>
-          @foreach ($shop->reviews as $review)
-            <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
-              <div class="block flex justify-between items-center">
-                <h4 class="text-lg font-bold">{{ $review->user->name }}</h4>
-                <div class="flex">
-                  @for ($i = 0; $i < $review->rating; $i++)
-                    <span class="text-yellow-500">★</span>
-                  @endfor
+        <div class="overflow-y-auto" style="max-height:35vh;">
+          <div class="flex items-center mb-5">
+            <h3 class="text-lg font-bold">#{{ $shop->area->name }}</h3>
+            <h3 class="text-lg font-bold">#{{ $shop->genre->name }}</h3>
+          </div>
+          <div class="w-full h-24 shop-description mb-12">
+            <h4 class="text-lg font-bold">{{ $shop->description }}</h4>
+          </div>
+          <div class="md:mb-14">
+            <h5 class="text-xl lg:text-3xl font-bold mb-4">お店のレビュー</h5>
+            @foreach ($shop->reviews as $review)
+              <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
+                <div class="block flex justify-between items-center">
+                  <h4 class="text-lg font-bold">{{ $review->user->name }}</h4>
+                  <div class="flex">
+                    @for ($i = 0; $i < $review->rating; $i++)
+                      <span class="text-yellow-500">★</span>
+                    @endfor
+                  </div>
                 </div>
+                <p class="mt-2">{{ $review->comment }}</p>
               </div>
-              <p class="mt-2">{{ $review->comment }}</p>
-            </div>
-          @endforeach
+            @endforeach
+          </div>
         </div>
 
       </div>
     </div>
 
     <!-- 右側 -->
-    <div class="md:flex-1 md:pl-10 w-full md:w-auto position-sticky top-0">
-      <div class="box-content border-blue-600 bg-blue-600 min-h-full w-full rounded-lg relative shadow-3xl pb-20">
+    <div class="md:flex-1 md:pl-10 w-full md:w-auto">
+      <div class="box-content border-blue-600 bg-blue-600 min-h-full w-full rounded-lg relative shadow-3xl md:pb-0 pb-20">
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5 ">
           <h6>予約</h6>
         </div>
@@ -180,18 +182,20 @@
         </form>
 
         <!-- コース料理説明 -->
-        <div class="mx-5">
-        @if($course_menus)
-          @foreach($course_menus as $course_menu)
-          <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
-            <div class="block flex justify-between items-center">
-              <h4 class="text-lg font-bold">{{ $course_menu->name }}</h4>
-              <p class="text-lg">{{ number_format($course_menu->price) }}円</p>
+        <div class="overflow-y-auto" style="max-height: 40vh;">
+          <div class="mx-5">
+          @if($course_menus)
+            @foreach($course_menus as $course_menu)
+            <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
+              <div class="block flex justify-between items-center">
+                <h4 class="text-lg font-bold">{{ $course_menu->name }}</h4>
+                <p class="text-lg">{{ number_format($course_menu->price) }}円</p>
+              </div>
+              <p class="mt-2">{{ $course_menu->description }}</p>
             </div>
-            <p class="mt-2">{{ $course_menu->description }}</p>
+            @endforeach
+          @endif
           </div>
-          @endforeach
-        @endif
         </div>
 
       </div>

@@ -7,7 +7,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
     <title>店舗代表者編集画面</title>
   </head>
-  <body class="min-h-screen bg-gray-100 px-8 lg:px-12">
+  <body id="edit-shop-page" class="min-h-screen bg-gray-100 px-8 lg:px-12">
     <header class="py-10">
       <div class="container mx-auto flex items-center justify-between">
         <h1 class="text-5xl font-extrabold text-blue-600"><span class="bg-blue-600 px-2 text-5xl font-extrabold text-white">Y</span>Rese</h1>
