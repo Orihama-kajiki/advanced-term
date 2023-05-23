@@ -1,5 +1,6 @@
 let courseMenuIndex = 1;
 let addCourseMenuButton = document.getElementById('add_course_menu');
+let deletedCourseMenuIds = [];
 
 if (addCourseMenuButton !== null) {
   addCourseMenuButton.addEventListener('click', function () {
@@ -29,7 +30,18 @@ if (addCourseMenuButton !== null) {
   });
 }
 
-let deletedCourseMenuIds = [];
+const tabs = document.getElementsByClassName('tab-menu__item');
+  for (let i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener('click', tabSwitch);
+  }
+function tabSwitch() {
+  document.getElementsByClassName('active')[0].classList.remove('active');
+  this.classList.add('active');
+  document.getElementsByClassName('show')[0].classList.remove('show');
+  const arrayTabs = Array.prototype.slice.call(tabs);
+  const index = arrayTabs.indexOf(this);
+  document.getElementsByClassName('tab-content__item')[index].classList.add('show');
+};
 
 document.querySelectorAll('.delete_course_menu').forEach((button) => {
   button.addEventListener('click', function () {
@@ -44,29 +56,18 @@ document.querySelectorAll('.delete_course_menu').forEach((button) => {
   });
 });
 
-
-document.querySelector('form').addEventListener('submit', function (e) {
-  deletedCourseMenuIds.forEach((id) => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = 'deleted_course_menu_ids[]';
-    input.value = id; 
-    this.appendChild(input);
+const form = document.querySelector('form');
+if (form !== null) {
+  form.addEventListener('submit', function (e) {
+    deletedCourseMenuIds.forEach((id) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = 'deleted_course_menu_ids[]';
+      input.value = id;
+      this.appendChild(input);
+    });
   });
-});
-
-const tabs = document.getElementsByClassName('tab-menu__item');
-  for (let i = 0; i < tabs.length; i++) {
-    tabs[i].addEventListener('click', tabSwitch);
-  }
-function tabSwitch() {
-  document.getElementsByClassName('active')[0].classList.remove('active');
-  this.classList.add('active');
-  document.getElementsByClassName('show')[0].classList.remove('show');
-  const arrayTabs = Array.prototype.slice.call(tabs);
-  const index = arrayTabs.indexOf(this);
-  document.getElementsByClassName('tab-content__item')[index].classList.add('show');
-};
+}
 
 document.addEventListener("DOMContentLoaded", function () {
   const tabMenu = document.querySelector(".tab-menu");
@@ -104,19 +105,19 @@ document.addEventListener("DOMContentLoaded", function () {
         reservations.forEach((reservation) => {
           const reservationDetailUrl = reservationDetailUrlTemplate.replace('RESERVATION_ID', reservation.id);
           const reservationDetail = `
-          <div class="reservation-detail flex justify-between items-center mb-4 text-2xl font-semibold">
-            <div>
-              <span class="mr-4">ユーザー名: ${reservation.user.name}</span>
-              <span class="mr-4">人数: ${reservation.num_of_users}</span>
-              <span >日時: ${reservation.start_at}</span>
+            <div id="reservation-${reservation.id}" class="reservation-detail flex justify-between items-center mb-4 text-2xl font-semibold">
+              <div>
+                <span class="mr-4">ユーザー名: ${reservation.user.name}</span>
+                <span class="mr-4">人数: ${reservation.num_of_users}</span>
+                <span>日時: ${reservation.start_at}</span>
+              </div>
+              <div>
+                <a href="${reservationDetailUrl}" class="bg-blue-500 text-white rounded px-3 py-1 mr-2 inline-block justify-center">
+                  詳細
+                </a>
+                <button class="bg-red-500 text-white rounded px-3 py-1" onclick="deleteReservation(${reservation.id})">削除</button>
+              </div>
             </div>
-            <div>
-              <a href="${reservationDetailUrl}" class="bg-blue-500 text-white rounded px-3 py-1 mr-2 inline-block justify-center">
-                詳細
-              </a>
-              <button class="bg-red-500 text-white rounded px-3 py-1" onclick="deleteReservation(${reservation.id})">削除</button>
-            </div>
-          </div>
           `;
           tabContentItem.insertAdjacentHTML('beforeend', reservationDetail);
         });
@@ -136,3 +137,37 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
+
+function deleteReservation(id) {
+  const url = `/shop-owner/reservation-delete/${id}`; 
+
+  const options = {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    },
+  };
+
+  fetch(url, options)
+    .then(response => response.json())
+    .then(json => {
+        console.log('Success:', json);
+        const reservationItem = document.querySelector(`#reservation-${id}`);
+        const tabContentItem = reservationItem.closest('.tab-content__item');
+
+
+        reservationItem.remove();
+
+        const remainingReservations = tabContentItem.querySelectorAll('.reservation-detail');
+        if (remainingReservations.length === 0) {
+            const noReservationMessage = `
+                <p class="text-2xl font-semibold">現在予約はありません。</p>
+            `;
+            tabContentItem.insertAdjacentHTML('beforeend', noReservationMessage);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}

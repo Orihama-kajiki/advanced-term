@@ -55,7 +55,7 @@ class AdminController extends Controller
     $subject = $request->input('subject');
     $message = $request->input('message');
 
-    $users = User::all();
+    $users = User::role('利用者')->get();
 
     foreach ($users as $user) {
       $user->notify(new AdminEmail($subject, $message));
@@ -63,5 +63,4 @@ class AdminController extends Controller
 
     return redirect()->back()->with('success', 'メールが送信されました');
   }
-
 }

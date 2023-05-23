@@ -45,8 +45,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'verified', 'checkRole:利用者'])->group(function () {
   Route::get('/mypage', [UserController::class, 'mypage'])->name('mypage');
   Route::post('/favorite', [FavoriteController::class, 'store'])->name('favorite.store');
-  Route::get('reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
-  Route::post('reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
+  Route::get('/reviews/create', [ReviewController::class, 'create'])->name('reviews.create');
+  Route::post('/reviews/store', [ReviewController::class, 'store'])->name('reviews.store');
   Route::delete('/reservations/{id}', [ReservationController::class, 'delete'])->name('reserve.delete');
   Route::get('/done', function () {return view('done');})->name('done');
   Route::post('/reservations/{id}', [ReservationController::class, 'update'])->name('reserve.update');
@@ -66,9 +66,10 @@ Route::middleware(['auth', 'checkRole:店舗責任者'])->group(function () {
   Route::get('shop-owner/reservation-list', [ShopOwnerController::class, 'reservationList'])->name('owner.reservation-list');
   Route::get('shop-owner/reservation-detail/{id}', [ShopOwnerController::class, 'reservationDetail'])->name('owner.reservation-detail');
   Route::put('shop-owner/reservation-update/{id}', [ShopOwnerController::class, 'updateReservation'])->name('owner.reservation-update');
+  Route::delete('shop-owner/reservation-delete/{id}', [ShopOwnerController::class, 'deleteReservation'])->name('owner.reservation-delete');
   Route::get('shop-owner/create', [ShopOwnerController::class, 'create'])->name('owner.create-shop');
   Route::post('shop-owner/store', [ShopOwnerController::class, 'store'])->name('owner.store-shop');
   Route::get('shop-owner/{id}/edit', [ShopOwnerController::class, 'edit'])->name('owner.edit-shop');
   Route::put('shop-owner/{id}/update', [ShopOwnerController::class, 'update'])->name('owner.update-shop');
-  Route::delete('shop-owner/{shop}/delete', [ShopOwnerController::class, 'destroy'])->name('owner.delete-shop');
+  Route::delete('shop-owner/{shop}/delete', [ShopOwnerController::class, 'delete'])->name('owner.delete-shop');
 });

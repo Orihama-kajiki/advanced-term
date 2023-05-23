@@ -183,7 +183,7 @@
 
         <!-- コース料理説明 -->
         <div class="overflow-y-auto" style="max-height: 40vh;">
-          <div class="mx-5">
+          <div class="m-5">
           @if($course_menus)
             @foreach($course_menus as $course_menu)
             <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">

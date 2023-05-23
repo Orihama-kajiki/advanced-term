@@ -1,4 +1,6 @@
 @component('mail::message')
+{{-- Header Image --}}
+<img src="{{ asset('img/rese.png') }}" alt="Rese Logo">
 {{-- Greeting --}}
 @if (! empty($greeting))
 # {{ $greeting }}
@@ -43,7 +45,7 @@
 @if (! empty($salutation))
 {{ $salutation }}
 @else
-@lang('よろしくお願いします'),<br>
+@lang('よろしくお願いします。')<br>
 {{ config('app.name') }}
 @endif
 

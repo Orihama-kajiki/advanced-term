@@ -117,73 +117,73 @@ class ShopOwnerController extends Controller
     ]);
   }
 
-public function update(UpdateShopRequest $request, $id)
-{
-  $shop = Shop::findOrFail($id);
+  public function update(UpdateShopRequest $request, $id)
+  {
+    $shop = Shop::findOrFail($id);
 
-  $data = $request->all();
+    $data = $request->all();
 
-  if ($request->hasFile('image_url')) {
-    $file = $request->file('image_url');
-    $path = $file->store('shops', 'public');
-    $data['image_url'] = $path;
+    if ($request->hasFile('image_url')) {
+      $file = $request->file('image_url');
+      $path = $file->store('shops', 'public');
+      $data['image_url'] = $path;
 
-    $s3 = new S3Client([
-      'version' => 'latest',
-      'region'  => env('AWS_DEFAULT_REGION'),
-      'credentials' => [
-        'key'    => env('AWS_ACCESS_KEY_ID'),
-        'secret' => env('AWS_SECRET_ACCESS_KEY'),
-      ],
-    ]);
+      $s3 = new S3Client([
+        'version' => 'latest',
+        'region'  => env('AWS_DEFAULT_REGION'),
+        'credentials' => [
+          'key'    => env('AWS_ACCESS_KEY_ID'),
+          'secret' => env('AWS_SECRET_ACCESS_KEY'),
+        ],
+      ]);
 
-    $result = $s3->putObject([
-      'Bucket' => env('AWS_BUCKET'),
-      'Key'    => $path,
-      'Body'   => fopen($file->getRealPath(), 'r'),
-      'ContentType' => $file->getMimeType(),
-      'CacheControl' => 'max-age=31536000',
-    ]);
+      $result = $s3->putObject([
+        'Bucket' => env('AWS_BUCKET'),
+        'Key'    => $path,
+        'Body'   => fopen($file->getRealPath(), 'r'),
+        'ContentType' => $file->getMimeType(),
+        'CacheControl' => 'max-age=31536000',
+      ]);
 
-    $data['image_url'] = $result['ObjectURL'];
-  }
+      $data['image_url'] = $result['ObjectURL'];
+    }
 
-  $shop->update($data);
+    $shop->update($data);
 
-  $course_names = $request->input('course_name') ?? [];
-  $course_prices = $request->input('course_price') ?? [];
-  $course_descriptions = $request->input('course_description') ?? [];
-  $deletedCourseMenuIds = $request->input('deleted_course_menu_ids', []);
+    $course_names = $request->input('course_name') ?? [];
+    $course_prices = $request->input('course_price') ?? [];
+    $course_descriptions = $request->input('course_description') ?? [];
+    $deletedCourseMenuIds = $request->input('deleted_course_menu_ids', []);
 
-  foreach ($course_names as $index => $course_name) {
-    if ($index < count($shop->courseMenus)) {
-      $courseMenu = $shop->courseMenus[$index];
-      $courseMenu->name = $course_name;
-      $courseMenu->price = $course_prices[$index];
-      $courseMenu->description = $course_descriptions[$index];
-      if ($courseMenu->name !== null && $courseMenu->price !== null && $courseMenu->description !== null) {
-        $courseMenu->save();
-      }
-    } else {
-      $courseMenu = new CourseMenu();
-      $courseMenu->shop_id = $shop->id;
-      $courseMenu->name = $course_name;
-      $courseMenu->price = $course_prices[$index];
-      $courseMenu->description = $course_descriptions[$index];
-      if ($courseMenu->name !== null && $courseMenu->price !== null && $courseMenu->description !== null) {
-        $courseMenu->save();
+    foreach ($course_names as $index => $course_name) {
+      if ($index < count($shop->courseMenus)) {
+        $courseMenu = $shop->courseMenus[$index];
+        $courseMenu->name = $course_name;
+        $courseMenu->price = $course_prices[$index];
+        $courseMenu->description = $course_descriptions[$index];
+        if ($courseMenu->name !== null && $courseMenu->price !== null && $courseMenu->description !== null) {
+          $courseMenu->save();
+        }
+      } else {
+        $courseMenu = new CourseMenu();
+        $courseMenu->shop_id = $shop->id;
+        $courseMenu->name = $course_name;
+        $courseMenu->price = $course_prices[$index];
+        $courseMenu->description = $course_descriptions[$index];
+        if ($courseMenu->name !== null && $courseMenu->price !== null && $courseMenu->description !== null) {
+          $courseMenu->save();
+        }
       }
     }
+
+    foreach ($deletedCourseMenuIds as $courseMenuId) {
+      CourseMenu::findOrFail($courseMenuId)->delete();
+    }    
+
+    return redirect()->route('owner.create-shop')->with('success', '店舗情報を更新しました');
   }
 
-  foreach ($deletedCourseMenuIds as $courseMenuId) {
-    CourseMenu::findOrFail($courseMenuId)->delete();
-  }    
-
-  return redirect()->route('owner.create-shop')->with('success', '店舗情報を更新しました');
-}
-
-  public function destroy(Shop $shop)
+  public function delete(Shop $shop)
   {
     if ($shop->image_url) {
       $s3 = new S3Client([
@@ -251,6 +251,17 @@ public function update(UpdateShopRequest $request, $id)
     $reservation->save();
 
     return redirect()->route('owner.reservation-list')->with('success', '予約が更新されました。');
+  }
+
+  public function deleteReservation($id)
+  {
+    $reservation = Reservation::find($id);
+    if ($reservation) {
+      $reservation->delete();
+      return response()->json(['success' => '予約が削除されました。'], 200);
+    } else {
+      return response()->json(['error' => '予約が見つかりませんでした。'], 404);
+    }
   }
 
   public function generateQrCode($id)
