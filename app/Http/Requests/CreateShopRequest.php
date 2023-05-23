@@ -8,7 +8,7 @@ class CreateShopRequest extends FormRequest
 {
   public function authorize()
   {
-    return true;
+      return true;
   }
 
   public function rules()
@@ -25,6 +25,30 @@ class CreateShopRequest extends FormRequest
     ];
   }
 
+  public function withValidator($validator)
+  {
+    $validator->after(function ($validator) {
+      $course_names = $this->get('course_name') ?? [];
+      $course_prices = $this->get('course_price') ?? [];
+      $course_descriptions = $this->get('course_description') ?? [];
+
+      $course_count = max(count($course_names), count($course_prices), count($course_descriptions));
+
+      for ($i = 0; $i < $course_count; $i++) {
+        $name = $course_names[$i] ?? null;
+        $price = $course_prices[$i] ?? null;
+        $description = $course_descriptions[$i] ?? null;
+
+        if ($name || $price || $description) {
+          if (!$name || !$price || !$description) {
+            $validator->errors()->add('courses', 'すべてのコースフィールドを入力するか、すべて空白にしてください。');
+            break;
+          }
+        }
+      }
+    });
+  }
+  
   public function messages()
   {
     return [

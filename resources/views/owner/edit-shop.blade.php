@@ -56,11 +56,14 @@
               @endforeach
             </select>
           </div>
+          @error('courses')
+            <div class="text-base text-red-600">{{ $message }}</div>
+          @enderror
           <div class="mb-2">
             <h2>コース･要予約メニュー(任意)</h2>
             @if(!empty($courseMenus))
               @foreach($courseMenus as $index => $courseMenu)
-                <div class="course_menu">
+                <div data-id="{{ $courseMenu->id }}">
                   <div class="flex mb-2">
                     <label for="course_name_{{ $index }}" class="block text-base">名前:</label>
                     <input type="text" name="course_name[{{ $index }}]" id="course_name_{{ $index }}" class="w-1/4" value="{{ $courseMenu->name }}"/>
@@ -69,16 +72,17 @@
                     <label for="course_price_{{ $index }}" class="block text-base">価格:</label>
                     <input type="text" name="course_price[{{ $index }}]" id="course_price_{{ $index }}" class="w-1/4" value="{{ $courseMenu->price }}"/>
                   </div>
-                  <div class=" mb-4">
+                  <div>
                     <label for="course_description_{{ $index }}" class="block text-base">説明</label>
                     <textarea name="course_description[{{ $index }}]" id="course_description_{{ $index }}" class="w-full text-base resize-none" rows="5">{{ $courseMenu->description }}</textarea>
                   </div>
+                  <button type="button" class="delete_course_menu border border-black mb-4 px-2">コースを削除</button>
                 </div>
               @endforeach
             @else
               <p id="no_course_message">コース・メニューがありません、追加してください。</p>
             @endif
-            <button type="button" id="add_course_menu" class="border border-black px-2" onclick="hideMessage()">追加する</button>
+            <button type="button" id="add_course_menu" class="border border-black px-2" onclick="hideMessage()">追加</button>
           </div>
           <div>
             <label for="description" class="block text-base">店舗概要</label>

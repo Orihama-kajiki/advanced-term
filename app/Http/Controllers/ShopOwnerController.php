@@ -46,58 +46,58 @@ class ShopOwnerController extends Controller
 
   public function store(CreateShopRequest $request)
   {
-      $shop = new Shop($request->all());
+    $shop = new Shop($request->all());
 
-      $shop->user_id = Auth::id();
+    $shop->user_id = Auth::id();
 
-      if ($request->hasFile('image_url')) {
-          $file = $request->file('image_url');
-          $path = $file->store('shops', 'public');
-          $shop->image_url = $path;
+    if ($request->hasFile('image_url')) {
+        $file = $request->file('image_url');
+        $path = $file->store('shops', 'public');
+        $shop->image_url = $path;
 
-          $s3 = new S3Client([
-              'version' => 'latest',
-              'region'  => env('AWS_DEFAULT_REGION'),
-              'credentials' => [
-                  'key'    => env('AWS_ACCESS_KEY_ID'),
-                  'secret' => env('AWS_SECRET_ACCESS_KEY'),
-              ],
-          ]);
+        $s3 = new S3Client([
+            'version' => 'latest',
+            'region'  => env('AWS_DEFAULT_REGION'),
+            'credentials' => [
+                'key'    => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
+        ]);
 
-          $result = $s3->putObject([
-              'Bucket' => env('AWS_BUCKET'),
-              'Key'    => $path,
-              'Body'   => fopen($file->getRealPath(), 'r'),
-              'ContentType' => $file->getMimeType(),
-              'CacheControl' => 'max-age=31536000',
-          ]);
+        $result = $s3->putObject([
+            'Bucket' => env('AWS_BUCKET'),
+            'Key'    => $path,
+            'Body'   => fopen($file->getRealPath(), 'r'),
+            'ContentType' => $file->getMimeType(),
+            'CacheControl' => 'max-age=31536000',
+        ]);
 
-          $shop->image_url = $result['ObjectURL'];
-      }
+        $shop->image_url = $result['ObjectURL'];
+    }
 
-      $shop->save();
-  if ($request->has('course_name') && $request->has('course_price') && $request->has('course_description')) {
-    $courseNames = $request->input('course_name');
-    $coursePrices = $request->input('course_price');
-    $courseDescriptions = $request->input('course_description');
+    $shop->save();
+    if ($request->has('course_name') && $request->has('course_price') && $request->has('course_description')) {
+      $courseNames = $request->input('course_name');
+      $coursePrices = $request->input('course_price');
+      $courseDescriptions = $request->input('course_description');
 
-      for ($i = 0; $i < count($courseNames); $i++) {
-        if (!empty($courseNames[$i]) || !empty($coursePrices[$i]) || !empty($courseDescriptions[$i])) {
-          if (empty($courseNames[$i]) || empty($coursePrices[$i]) || empty($courseDescriptions[$i])) {
-            return back()->withErrors([
-              'course_name' => 'すべてのコースメニュー項目を入力してください',
-            ])->withInput();
-          } else {
-            $courseMenu = new CourseMenu();
-            $courseMenu->shop_id = $shop->id;
-            $courseMenu->name = $courseNames[$i];
-            $courseMenu->price = $coursePrices[$i];
-            $courseMenu->description = $courseDescriptions[$i];
-            $courseMenu->save();
-          }
+    for ($i = 0; $i < count($courseNames); $i++) {
+      if (!empty($courseNames[$i]) || !empty($coursePrices[$i]) || !empty($courseDescriptions[$i])) {
+        if (empty($courseNames[$i]) || empty($coursePrices[$i]) || empty($courseDescriptions[$i])) {
+          return back()->withErrors([
+            'course_name' => 'すべてのコースメニュー項目を入力してください',
+          ])->withInput();
+        } else {
+          $courseMenu = new CourseMenu();
+          $courseMenu->shop_id = $shop->id;
+          $courseMenu->name = $courseNames[$i];
+          $courseMenu->price = $coursePrices[$i];
+          $courseMenu->description = $courseDescriptions[$i];
+          $courseMenu->save();
         }
       }
     }
+  }
     return redirect()->route('owner.create-shop')->with('success', '店舗を作成しました');
   }
 
@@ -119,60 +119,68 @@ class ShopOwnerController extends Controller
 
 public function update(UpdateShopRequest $request, $id)
 {
-    $shop = Shop::findOrFail($id);
+  $shop = Shop::findOrFail($id);
 
-    $data = $request->all();
+  $data = $request->all();
 
-    if ($request->hasFile('image_url')) {
-        $file = $request->file('image_url');
-        $path = $file->store('shops', 'public');
-        $data['image_url'] = $path;
+  if ($request->hasFile('image_url')) {
+    $file = $request->file('image_url');
+    $path = $file->store('shops', 'public');
+    $data['image_url'] = $path;
 
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region'  => env('AWS_DEFAULT_REGION'),
-            'credentials' => [
-                'key'    => env('AWS_ACCESS_KEY_ID'),
-                'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            ],
-        ]);
+    $s3 = new S3Client([
+      'version' => 'latest',
+      'region'  => env('AWS_DEFAULT_REGION'),
+      'credentials' => [
+        'key'    => env('AWS_ACCESS_KEY_ID'),
+        'secret' => env('AWS_SECRET_ACCESS_KEY'),
+      ],
+    ]);
 
-        $result = $s3->putObject([
-            'Bucket' => env('AWS_BUCKET'),
-            'Key'    => $path,
-            'Body'   => fopen($file->getRealPath(), 'r'),
-            'ContentType' => $file->getMimeType(),
-            'CacheControl' => 'max-age=31536000',
-        ]);
+    $result = $s3->putObject([
+      'Bucket' => env('AWS_BUCKET'),
+      'Key'    => $path,
+      'Body'   => fopen($file->getRealPath(), 'r'),
+      'ContentType' => $file->getMimeType(),
+      'CacheControl' => 'max-age=31536000',
+    ]);
 
-        $data['image_url'] = $result['ObjectURL'];
-    }
+    $data['image_url'] = $result['ObjectURL'];
+  }
 
-    $shop->update($data);
+  $shop->update($data);
 
-    $course_names = $request->input('course_name');
-    $course_prices = $request->input('course_price');
-    $course_descriptions = $request->input('course_description');
+  $course_names = $request->input('course_name') ?? [];
+  $course_prices = $request->input('course_price') ?? [];
+  $course_descriptions = $request->input('course_description') ?? [];
+  $deletedCourseMenuIds = $request->input('deleted_course_menu_ids', []);
 
-    foreach ($course_names as $index => $course_name) {
-      if ($index < count($shop->courseMenus)) {
-        $courseMenu = $shop->courseMenus[$index];
-        $courseMenu->name = $course_name;
-        $courseMenu->price = $course_prices[$index];
-        $courseMenu->description = $course_descriptions[$index];
-        $courseMenu->save();
-      } else {
-        $courseMenu = new CourseMenu();
-        $courseMenu->shop_id = $shop->id;
-        $courseMenu->name = $course_name;
-        $courseMenu->price = $course_prices[$index];
-        $courseMenu->description = $course_descriptions[$index];
+  foreach ($course_names as $index => $course_name) {
+    if ($index < count($shop->courseMenus)) {
+      $courseMenu = $shop->courseMenus[$index];
+      $courseMenu->name = $course_name;
+      $courseMenu->price = $course_prices[$index];
+      $courseMenu->description = $course_descriptions[$index];
+      if ($courseMenu->name !== null && $courseMenu->price !== null && $courseMenu->description !== null) {
         $courseMenu->save();
       }
-
+    } else {
+      $courseMenu = new CourseMenu();
+      $courseMenu->shop_id = $shop->id;
+      $courseMenu->name = $course_name;
+      $courseMenu->price = $course_prices[$index];
+      $courseMenu->description = $course_descriptions[$index];
+      if ($courseMenu->name !== null && $courseMenu->price !== null && $courseMenu->description !== null) {
+        $courseMenu->save();
+      }
     }
+  }
 
-    return redirect()->route('owner.create-shop')->with('success', '店舗情報を更新しました');
+  foreach ($deletedCourseMenuIds as $courseMenuId) {
+    CourseMenu::findOrFail($courseMenuId)->delete();
+  }    
+
+  return redirect()->route('owner.create-shop')->with('success', '店舗情報を更新しました');
 }
 
   public function destroy(Shop $shop)

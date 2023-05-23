@@ -15,51 +15,50 @@ if (addCourseMenuButton !== null) {
         <label for="course_price_${courseMenuIndex}" class="block text-base">価格:</label>
         <input type="text" name="course_price[]" id="course_price_${courseMenuIndex}" class="w-1/4"/>
       </div>
-      <div class=" mb-4">
+      <div>
         <label for="course_description_${courseMenuIndex}" class="block text-base">説明</label>
         <textarea name="course_description[]" id="course_description_${courseMenuIndex}" class="w-full text-base resize-none" rows="5"></textarea>
       </div>
+      <button type="button" class="delete_course_menu border border-black mb-4 px-2">コースを削除</button>
     `;
     addCourseMenuButton.parentNode.insertBefore(courseMenu, addCourseMenuButton);
+
+    courseMenu.querySelector('.delete_course_menu').addEventListener('click', function () {
+      courseMenu.remove();
+    });
   });
 }
 
-if (document.querySelector('body#create-shop-page')) {
-    document.querySelectorAll('.delete_course_menu').forEach((button) => {
-        button.addEventListener('click', function () {
-            const courseMenuElement = button.parentElement;
-            courseMenuElement.remove();
-        });
-    });
-} else if (document.querySelector('body#edit-shop-page')) {
-    let deletedCourseMenuIds = [];
-  
-    document.querySelectorAll('.delete_course_menu').forEach((button) => {
-        button.addEventListener('click', function () {
-            const courseMenuElement = button.parentElement;
-            const courseMenuId = courseMenuElement.getAttribute('data-id');
+let deletedCourseMenuIds = [];
 
-            if (courseMenuId) {
-                deletedCourseMenuIds.push(courseMenuId);
-            }
+document.querySelectorAll('.delete_course_menu').forEach((button) => {
+  button.addEventListener('click', function () {
+    const courseMenuElement = button.parentElement;
+    const courseMenuId = courseMenuElement.getAttribute('data-id');
 
-            courseMenuElement.remove();
-        });
-    });
+    if (courseMenuId) {
+      deletedCourseMenuIds.push(courseMenuId);
+    }
 
-    document.querySelector('form').addEventListener('submit', function (e) {
-      const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = 'deleted_course_menu_ids';
-        input.value = JSON.stringify(deletedCourseMenuIds);
-        this.appendChild(input);
-    });
-}
+    courseMenuElement.remove();
+  });
+});
+
+
+document.querySelector('form').addEventListener('submit', function (e) {
+  deletedCourseMenuIds.forEach((id) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'deleted_course_menu_ids[]';
+    input.value = id; 
+    this.appendChild(input);
+  });
+});
 
 const tabs = document.getElementsByClassName('tab-menu__item');
-for (let i = 0; i < tabs.length; i++) {
-  tabs[i].addEventListener('click', tabSwitch);
-}
+  for (let i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener('click', tabSwitch);
+  }
 function tabSwitch() {
   document.getElementsByClassName('active')[0].classList.remove('active');
   this.classList.add('active');

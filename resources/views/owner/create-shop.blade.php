@@ -68,7 +68,10 @@
                     @endforeach
                   </select>
                 </div>
-                <div class="course_menu" data-id="{{ $courseMenu->id }}">
+                @error('courses')
+                  <div class="text-base text-red-600">{{ $message }}</div>
+                @enderror
+                <div id="course_menus" class="course_menu">
                   <label class="block text-base">コース･要予約メニュー(任意)</label>
                   <div class="course_menu">
                     <div class="flex mb-2">
