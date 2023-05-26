@@ -10,29 +10,31 @@ use Faker\Factory as Faker;
 
 class ReviewsTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $faker = Faker::create('ja_JP');
-        
-        $users = User::where('id', '>=', 31)->where('id', '<=', 130)->get();
-        $shops = Shop::where('id', '>=', 1)->where('id', '<=', 20)->get();
+  /**
+   * Run the database seeds.
+   *
+   * @return void
+   */
+  public function run()
+  {
+    $faker = Faker::create('ja_JP');
+    $users = User::where('email', '!=', 'admin@example.com')
+                    ->where('email', '!=', 'owner@example.com')
+                    ->where('email', '!=', 'user@example.com')
+                    ->get();
+    $shops = Shop::all();
 
-        foreach ($users as $user) {
-            foreach ($shops as $shop) {
-                if (rand(0, 1)) {
-                    Review::create([
-                        'user_id' => $user->id,
-                        'shop_id' => $shop->id,
-                        'rating' => rand(1, 5),
-                        'comment' => $faker->realText(50), 
-                    ]);
-                }
-            }
+    foreach ($users as $user) {
+      foreach ($shops as $shop) {
+        if (rand(0, 1)) {
+          Review::create([
+            'user_id' => $user->id,
+            'shop_id' => $shop->id,
+            'rating' => rand(1, 5),
+            'comment' => $faker->realText(50), 
+          ]);
         }
+      }
     }
+  }
 }

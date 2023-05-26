@@ -20,5 +20,9 @@ class CourseMenu extends Model
   {
     return $this->belongsTo(Shop::class);
   }
-}
 
+    public function reservations()
+  {
+      return $this->hasMany(Reservation::class);
+  }
+}

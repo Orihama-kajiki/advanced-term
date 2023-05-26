@@ -7,13 +7,13 @@ use Illuminate\Database\Seeder;
 
 class AssignAdminToShopsSeeder extends Seeder
 {
-    public function run()
-    {
-        $adminUserId = 1;
+  public function run()
+  {
+    $adminUserId = 1;
 
-        Shop::all()->each(function ($shop) use ($adminUserId) {
-            $shop->user_id = $adminUserId;
-            $shop->save();
-        });
-    }
+    Shop::all()->each(function ($shop) use ($adminUserId) {
+      $shop->user_id = $adminUserId;
+      $shop->save();
+    });
+  }
 }

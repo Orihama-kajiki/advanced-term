@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Area extends Model
 {
-    protected $table = 'areas'; 
+  protected $table = 'areas'; 
 
-    public function shops()
-    {
-        return $this->hasMany(Shop::class);
-    }
-
+  public function shops()
+  {
+    return $this->hasMany(Shop::class);
+  }
 }
