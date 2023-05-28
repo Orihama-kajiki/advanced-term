@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateFavoritesTable extends Migration
 {
-
     public function up()
     {
         Schema::create('favorites', function (Blueprint $table) {
@@ -23,7 +22,6 @@ class CreateFavoritesTable extends Migration
     public function down()
     {
         Schema::table('favorites', function (Blueprint $table) {
-
             $table->dropForeign(['shop_id']);
             $table->dropForeign(['user_id']);
         });

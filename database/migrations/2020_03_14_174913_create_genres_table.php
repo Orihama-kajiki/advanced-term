@@ -13,6 +13,7 @@ class CreateGenresTable extends Migration
             $table->unsignedBigInteger('id', true);
             $table->string('name');
             $table->timestamps();
+            $table->engine = 'InnoDB';
         });
     }
 
