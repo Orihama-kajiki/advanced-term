@@ -211,7 +211,7 @@ class ShopOwnerController extends Controller
   public function reservationlist()
   {
     $shops = Shop::where('user_id', Auth::id())->get();
-    $reservations = Reservation::whereIn('shop_id', $shops->pluck('id'))->with('user')->get();
+    $reservations = Reservation::whereIn('shop_id', $shops->pluck('id'))->with('user', 'course_menu')->get();
     $reservationsByShop = [];
 
     foreach ($reservations as $reservation) {
@@ -240,13 +240,12 @@ class ShopOwnerController extends Controller
     $request->validate([
       'num_of_users' => 'required|integer',
       'date' => 'required|date',
-      'hour' => 'required|integer|min:0|max:23',
-      'minute' => 'required|integer|min:0|max:59',
+      'time' => 'required|date_format:"H:i"',
     ]);
 
     $reservation = Reservation::find($id);
     $reservation->num_of_users = $request->input('num_of_users');
-    $reservation->start_at = Carbon::createFromFormat('Y-m-d H:i', $request->input('date') . ' ' . $request->input('hour') . ':' . $request->input('minute'));
+    $reservation->start_at = Carbon::createFromFormat('Y-m-d H:i', $request->input('date') . ' ' . $request->input('time'));
 
     $reservation->save();
 

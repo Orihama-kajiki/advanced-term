@@ -10,11 +10,6 @@ use Faker\Factory as Faker;
 
 class ReviewsTableSeeder extends Seeder
 {
-  /**
-   * Run the database seeds.
-   *
-   * @return void
-   */
   public function run()
   {
     $faker = Faker::create('ja_JP');
@@ -24,8 +19,14 @@ class ReviewsTableSeeder extends Seeder
                     ->get();
     $shops = Shop::all();
 
+    $reviewCount = 0;
+
     foreach ($users as $user) {
       foreach ($shops as $shop) {
+        if ($reviewCount >= 100) {
+          break;
+        }
+        
         if (rand(0, 1)) {
           Review::create([
             'user_id' => $user->id,
@@ -33,6 +34,7 @@ class ReviewsTableSeeder extends Seeder
             'rating' => rand(1, 5),
             'comment' => $faker->realText(50), 
           ]);
+          $reviewCount++;
         }
       }
     }

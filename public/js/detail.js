@@ -59,21 +59,22 @@ function setReservationValues(numOfUsers, startAt, courseMenuId) {
 }
 document.getElementById("reservation-form-btn").addEventListener("click", /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(event) {
-    var userId, isAuthenticated, numOfUsers, selectedDate, selectedTime, startAt, courseMenuId, shopId, _csrfToken, response, data;
+    var userId, isAuthenticated, isEmailVerified, numOfUsers, selectedDate, selectedTime, startAt, courseMenuId, shopId, _csrfToken, response, data;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           userId = document.querySelector("input[name='user_id']").value;
           isAuthenticated = !!userId;
+          isEmailVerified = "{{ Auth::check() && Auth::user()->hasVerifiedEmail() }}";
           if (isAuthenticated) {
-            _context.next = 7;
+            _context.next = 8;
             break;
           }
           alert('ログインが必要です。');
           event.preventDefault();
           window.location.href = "/login";
           return _context.abrupt("return");
-        case 7:
+        case 8:
           numOfUsers = document.getElementById("num_of_users").value;
           selectedDate = document.getElementById("calendar").value;
           selectedTime = document.getElementById("time").value;
@@ -83,11 +84,11 @@ document.getElementById("reservation-form-btn").addEventListener("click", /*#__P
           setReservationValues(numOfUsers, startAt, courseMenuId);
           event.preventDefault();
           if (!courseMenuId) {
-            _context.next = 29;
+            _context.next = 30;
             break;
           }
           _csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-          _context.next = 19;
+          _context.next = 20;
           return fetch('/api/create-checkout-session', {
             method: 'POST',
             headers: {
@@ -102,25 +103,25 @@ document.getElementById("reservation-form-btn").addEventListener("click", /*#__P
               course_menu_id: courseMenuId
             })
           });
-        case 19:
+        case 20:
           response = _context.sent;
-          _context.next = 22;
+          _context.next = 23;
           return response.json();
-        case 22:
+        case 23:
           data = _context.sent;
           if (!data.error) {
-            _context.next = 26;
+            _context.next = 27;
             break;
           }
           alert(data.error);
           return _context.abrupt("return");
-        case 26:
+        case 27:
           window.location.href = data.url;
-          _context.next = 30;
+          _context.next = 31;
           break;
-        case 29:
-          document.getElementById('reservation-form').submit();
         case 30:
+          document.getElementById('reservation-form').submit();
+        case 31:
         case "end":
           return _context.stop();
       }

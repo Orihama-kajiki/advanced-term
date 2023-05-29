@@ -62,22 +62,26 @@
                     </form>
                   </div>
                   <div>
-                    <table class="table-responsive">
+                    <table>
                       <tr>
-                        <th>Shop</th>
+                        <th class="text-left">Shop</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-shop">{{ $reservation->shop->name ?? 'Unknown' }}</td>
                       </tr>
                       <tr>
-                        <th>Date</th>
+                        <th class="text-left">Date</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-date">{{ date('Y-m-d', strtotime($reservation->start_at)) }}</td>
                       </tr>
                       <tr>
-                        <th>Time</th>
+                        <th class="text-left">Time</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-time">{{ date('H:i', strtotime($reservation->start_at)) }}</td>
                       </tr>
                       <tr>
-                        <th>Number</th>
+                        <th class="text-left">Number</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-num-of-users">{{ $reservation->num_of_users }}</td>
+                      </tr>
+                      <tr>
+                        <th class="text-left">Course Menu</th>
+                        <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-course-menu">{{ $reservation->course_menu->name ?? 'コースメニューは選択されていません' }}</td>
                       </tr>
                     </table>
                   </div>
@@ -117,22 +121,26 @@
                     </div>
                   </div>
                   <div>
-                    <table class="table-responsive">
+                    <table>
                       <tr>
-                        <th>Shop</th>
+                        <th class="text-left">Shop</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-shop">{{ $reservation->shop->name ?? 'Unknown' }}</td>
                       </tr>
                       <tr>
-                        <th>Date</th>
+                        <th class="text-left">Date</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-date">{{ date('Y-m-d', strtotime($reservation->start_at)) }}</td>
                       </tr>
                       <tr>
-                        <th>Time</th>
+                        <th class="text-left">Time</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-time">{{ date('H:i', strtotime($reservation->start_at)) }}</td>
                       </tr>
                       <tr>
-                        <th>Number</th>
+                        <th class="text-left">Number</th>
                         <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-num-of-users">{{ $reservation->num_of_users }}</td>
+                      </tr>
+                      <tr>
+                        <th class="text-left">Course Menu</th>
+                        <td class="pl-5 pb-5" id="reservation-{{ $reservation->id }}-course-menu">{{ $reservation->course_menu->name ?? 'コースメニューは選択されていません' }}</td>
                       </tr>
                     </table>
                   </div>
@@ -155,7 +163,7 @@
 
         <!-- レビュー履歴 -->
         <div id="past-reviews" class="tabcontent">
-          @foreach($reviews as $review)
+          @forelse($reviews as $review)
             <div class="review-item bg-white shadow-md rounded-lg p-4 mt-4">
               <div class="flex justify-between items-center">
                 <h2 class="text-xl font-bold">{{ $review->shop->name }}</h2>
@@ -167,7 +175,11 @@
               </div>
               <p class="mt-2">{{ $review->comment }}</p>
             </div>
-          @endforeach
+          @empty
+            <div class="my-12 w-full lg:w-4/5">
+              <h2 class="text-2xl font-semibold">レビュー履歴はありません。</h2>
+            </div>
+          @endforelse
         </div>
 
       </div>
@@ -210,8 +222,12 @@
   <!-- 予約編集画面 -->
   <div class="modal-bg-2 fixed inset-0 bg-gray-500 bg-opacity-50 z-40 hidden"></div>
   <div class="modal-content-2 fixed inset-0 z-50 items-center justify-center flex hidden">
-    <div class="h-96 w-80 mx-auto bg-white rounded-md overflow-hidden">
-      <form id="update-reservation-form" action="{{ route('reserve.update', $reservation) }}" method="POST">
+    <div class="w-80 mx-auto bg-white rounded-md overflow-hidden">
+      @if($reservations->isNotEmpty())
+      <form id="update-reservation-form" action="{{ route('reserve.update', $reservations->first()) }}" method="POST">
+      @else
+      <form id="update-reservation-form" method="POST">
+      @endif
         @csrf
         <div class="bg-blue-600 px-4 py-3">
           <h3 class="text-lg font-medium text-white">予約情報を更新する</h3>
@@ -232,7 +248,8 @@
           @else
             <input type="number" name="num_of_users" id="num_of_users" class="border-b border-gray-300 rounded-md w-full py-2 px-3 mb-3 focus:outline-none focus:ring-blue-600 focus:border-blue-600" value="">
           @endif
-          <div class="flex justify-between">
+          <span class="text-red-500 text-sm">*コース料理を注文し、先払いされたお客様は店舗へ直接ご連絡ください。</span>
+          <div class="flex justify-between mb-2">
             <button type="button" class="cancel-btn bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded mr-2">
               キャンセル
             </button>

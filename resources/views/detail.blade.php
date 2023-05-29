@@ -2,9 +2,9 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Rese</title>
   <script src="https://js.stripe.com/v3/"></script>
   <script src="/js/jquery-3.6.4.min.js"></script>
@@ -38,7 +38,13 @@
                   <li class="menu__item px-4 py-2"><a href="{{ route('register') }}">Registration</a></li>
                   <li class="menu__item px-4 py-2"><a href="{{ route('login') }}">Login</a></li>
                   @else
-                  <li class="menu__item px-4 py-2"><a href="{{ route('mypage') }}">Mypage</a></li>
+                  <li class="menu__item px-4 py-2">
+                    @if(Auth::check() && Auth::user()->hasVerifiedEmail())
+                      <a href="{{ route('mypage') }}">Mypage</a>
+                    @else
+                      <a href="#" disabled onclick="alert('認証してください'); return false;">Mypage</a>
+                    @endif
+                  </li>
                   <li class="menu__item px-4 py-2">
                     <form method="POST" action="{{ route('logout') }}">
                       @csrf

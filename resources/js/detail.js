@@ -63,6 +63,7 @@ function setReservationValues(numOfUsers, startAt, courseMenuId) {
 document.getElementById("reservation-form-btn").addEventListener("click", async function (event) {
   const userId = document.querySelector("input[name='user_id']").value;
   const isAuthenticated = !!userId;
+  const isEmailVerified = "{{ Auth::check() && Auth::user()->hasVerifiedEmail() }}";
 
   if (!isAuthenticated) {
     alert('ログインが必要です。');
@@ -70,7 +71,7 @@ document.getElementById("reservation-form-btn").addEventListener("click", async 
     window.location.href = "/login"; 
     return;
   }
-
+  
   const numOfUsers = document.getElementById("num_of_users").value;
   const selectedDate = document.getElementById("calendar").value;
   const selectedTime = document.getElementById("time").value;

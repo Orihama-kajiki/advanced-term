@@ -32,7 +32,13 @@
               <li class="menu__item px-4 py-2"><a href="{{ route('register') }}">Registration</a></li>
               <li class="menu__item px-4 py-2"><a href="{{ route('login') }}">Login</a></li>
               @else
-              <li class="menu__item px-4 py-2"><a href="{{ route('mypage') }}">Mypage</a></li>
+              <li class="menu__item px-4 py-2">
+                @if(Auth::check() && Auth::user()->hasVerifiedEmail())
+                  <a href="{{ route('mypage') }}">Mypage</a>
+                @else
+                  <a href="#" disabled onclick="alert('認証してください'); return false;">Mypage</a>
+                @endif
+              </li>
               <li class="menu__item px-4 py-2">
                 <form method="POST" action="{{ route('logout') }}">
                   @csrf

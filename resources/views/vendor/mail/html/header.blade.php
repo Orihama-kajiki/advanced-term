@@ -1,7 +1,5 @@
 <tr>
-<td class="header">
-<a href="{{ $url }}" style="display: inline-block;">
-<img src="{{ url('/img/rese.png') }}" class="logo" alt="Rese Logo">
-</a>
-</td>
+  <td class="header flex justify-center items-center text-4xl font-bold">
+    <p class="text-black text-center">&nbsp;</p>
+  </td>
 </tr>

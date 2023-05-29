@@ -40,17 +40,16 @@
             </div>
             <div class="mb-4">
               <h3 class="text-2xl font-semibold mb-2">時間</h3>
-              <select name="hour" id="hour" class="border rounded px-3 py-2">
-                @for ($i = 0; $i <= 23; $i++)
-                  <option value="{{ $i }}" {{ $i == $reservation->start_at->format('H') ? 'selected' : '' }}>{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
+              <select name="time" id="time" class="border rounded px-3 py-2">
+                @for ($i = 11; $i <= 23; $i++)
+                  <option value="{{ $i }}:00" {{ $i == $reservation->start_at->format('H') ? 'selected' : '' }}>{{ $i }}:00</option>
+                  <option value="{{ $i }}:30" {{ $i == $reservation->start_at->format('H') && $reservation->start_at->format('i') == '30' ? 'selected' : '' }}>{{ $i }}:30</option>
                 @endfor
               </select>
-              :
-              <select name="minute" id="minute" class="border rounded px-3 py-2">
-                @for ($i = 0; $i <= 59; $i += 30)
-                  <option value="{{ $i }}" {{ $i == $reservation->start_at->format('i') ? 'selected' : '' }}>{{ str_pad($i, 2, '0', STR_PAD_LEFT) }}</option>
-                @endfor
-              </select>
+            </div>
+            <div class="pt-2 mb-4">
+              <h3 class="text-2xl font-semibold mb-2">コースメニュー:{{ $reservation->course_menu->name ?? 'コースメニューは選択されていません' }}</h3>
+              <p class="text-red-500">*コースが選択されている場合、既に支払いが発生しています。変更等が発生した場合は決済ページ等で変更・返金してください</p>
             </div>
             <div class="my-4 flex justify-between">
               <a href="{{ route('owner.reservation-list') }}" class="rounded bg-gray-500 px-4 py-2 font-bold text-white">戻る</a>

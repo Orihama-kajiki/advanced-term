@@ -1371,9 +1371,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity));
 }
-.underline {
-  text-decoration-line: underline;
-}
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1616,6 +1613,10 @@ video {
   transform: translateY(-50%);
 }
 
+th.text-left {
+    text-align: left !important;
+}
+
 .carender-icon {
   position: absolute;
   top: 50%;
@@ -1741,11 +1742,6 @@ video {
 .hover\:text-gray-800:hover {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
-}
-
-.hover\:text-gray-900:hover {
-  --tw-text-opacity: 1;
-  color: rgb(17 24 39 / var(--tw-text-opacity));
 }
 
 .focus\:border-blue-600:focus {

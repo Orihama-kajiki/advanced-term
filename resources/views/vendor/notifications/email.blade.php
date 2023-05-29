@@ -1,6 +1,4 @@
 @component('mail::message')
-{{-- Header Image --}}
-<img src="{{ asset('img/rese.png') }}" alt="Rese Logo">
 {{-- Greeting --}}
 @if (! empty($greeting))
 # {{ $greeting }}

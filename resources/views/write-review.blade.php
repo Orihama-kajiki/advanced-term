@@ -43,46 +43,61 @@
       </div>
     </div>
   </header>
+      @if ($errors->has('error'))
+    <div class="text-red-500">
+        {{ $errors->first('error') }}
+    </div>
+    @endif
   <div class="flex flex-col md:flex-row bg-gray-100 h-2/3">
     <div class="flex-1 mb-10 md:mr-10 md:mb-0">
-    @if (session('success'))
-      <div class="flex justify-center alert alert-success">
-        <div class="h-64 w-96 mt-32 border border-white bg-white rounded-lg shadow-3xl flex flex-col justify-center items-center">
-          <div class="text-2xl font-bold mb-12 tracking-wider">
-            <p>{{ session('success') }}</p>
+      @if (session('success'))
+        <div class="flex justify-center alert alert-success">
+          <div class="h-64 w-96 mt-32 border border-white bg-white rounded-lg shadow-3xl flex flex-col justify-center items-center">
+            <div class="text-2xl font-bold mb-12 tracking-wider">
+              <p>{{ session('success') }}</p>
+            </div>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-4 rounded focus:outline-none focus:shadow-outline">
+              <a href="{{ route('mypage') }}" class="inline-flex items-center justify-center h-full px-4 text-lg text-white font-semibold">
+                マイページに戻る
+              </a>
+            </button>
           </div>
-          <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-4 rounded focus:outline-none focus:shadow-outline">
-            <a href="{{ route('mypage') }}" class="inline-flex items-center justify-center h-full px-4 text-lg text-white font-semibold">
-              マイページに戻る
-            </a>
-          </button>
         </div>
-      </div>
-    @elseif ($shop)
+      @elseif ($shop)
       <div class="box-content border-blue-600 bg-blue-600 min-h-full w-full rounded-lg relative shadow-3xl md:min-h-full h-[30rem]">
         <div class="text-2xl text-white font-bold pt-8 ml-5 mb-5">
           <span>点数</span>
         </div>
-          <form method="POST" action="{{ route('reviews.store') }}" class="h-2/3" novalidate>
-            @csrf
-            <input type="hidden" name="shop_id" value="{{ $shop->id }}">
-            <div class="flex ml-5 mb-6">
-              <span class="star text-5xl cursor-pointer" id="1" data-rating="1">★</span>
-              <span class="star text-5xl cursor-pointer" id="2" data-rating="2">★</span>
-              <span class="star text-5xl cursor-pointer" id="3" data-rating="3">★</span>
-              <span class="star text-5xl cursor-pointer" id="4" data-rating="4">★</span>
-              <span class="star text-5xl cursor-pointer" id="5" data-rating="5">★</span>
-              <input type="hidden" name="rating" id="rating" value="">
+        <form method="POST" action="{{ route('reviews.store') }}" class="h-2/3" novalidate>
+          @csrf
+          @if ($errors->has('rating'))
+            <div class="text-red-500 text-sm ml-5">
+              {{ $errors->first('rating') }}
             </div>
-            <div class="form-group mx-3 mt-auto h-2/3">
-              <textarea name="comment" id="comment" rows="4" class="form-control min-h-full w-full px-3 py-3 border-blue-300 bg-blue-300 border-4 rounded-lg resize-none" placeholder="ここにコメントを入力してください。"></textarea>
+          @endif
+          <input type="hidden" name="shop_id" value="{{ $shop->id }}">
+          <div class="flex ml-5 mb-6">
+            <span class="star text-5xl cursor-pointer" id="1" data-rating="1">★</span>
+            <span class="star text-5xl cursor-pointer" id="2" data-rating="2">★</span>
+            <span class="star text-5xl cursor-pointer" id="3" data-rating="3">★</span>
+            <span class="star text-5xl cursor-pointer" id="4" data-rating="4">★</span>
+            <span class="star text-5xl cursor-pointer" id="5" data-rating="5">★</span>
+            <input type="hidden" name="rating" id="rating" value="">
+          </div>
+          @if ($errors->has('comment'))
+            <div class="text-red-500 text-sm ml-5">
+              {{ $errors->first('comment') }}
             </div>
-            <div class="bg-blue-700 h-16 w-full bottom-0 rounded-b-lg absolute">
-              <button type="submit" class="text-lg text-white text-center items-center w-full h-full">
-                <p class="font-bold">送信</p>
-              </button>
-            </div>
-          </form>
+          @endif
+          <div class="form-group mx-3 mt-auto h-2/3">
+            <textarea name="comment" id="comment" rows="4" class="form-control min-h-full w-full px-3 py-3 border-blue-300 bg-blue-300 border-4 rounded-lg resize-none" placeholder="ここにコメントを入力してください。"></textarea>
+          </div>
+          <div class="bg-blue-700 h-16 w-full bottom-0 rounded-b-lg absolute">
+            <button type="submit" class="text-lg text-white text-center items-center w-full h-full">
+              <p class="font-bold">送信</p>
+            </button>
+          </div>
+        </form>
         @else
           <p>お店が見つかりませんでした。もう一度試してください。</p>
         @endif

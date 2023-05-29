@@ -109,7 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
               <div>
                 <span class="mr-4">ユーザー名: ${reservation.user.name}</span>
                 <span class="mr-4">人数: ${reservation.num_of_users}</span>
-                <span>日時: ${reservation.start_at}</span>
+                <span class="mr-4">日時: ${reservation.start_at}</span>
+                <span>コースメニュー: ${reservation.course_menu ? reservation.course_menu.name : 'コースメニューは選択されていません'}</span>
               </div>
               <div>
                 <a href="${reservationDetailUrl}" class="bg-blue-500 text-white rounded px-3 py-1 mr-2 inline-block justify-center">

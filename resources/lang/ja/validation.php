@@ -130,6 +130,7 @@ return [
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -169,6 +170,7 @@ return [
         'password_confirmation' => 'パスワード(確認)',
         'subject' => 'メール件名',
         'message' => 'メール本文',
+        'rating' => '評価',
+        'comment' => 'コメント',
     ],
-
 ];

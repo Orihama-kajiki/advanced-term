@@ -30,7 +30,7 @@ class ReviewController extends Controller
             ->first();
 
         if ($existingReview) {
-            return redirect()->back()->withErrors(['error' => 'あなたはすでにこのお店にレビューを投稿しています。']);
+            return redirect()->back()->withErrors(['error' => '恐れ入りますが、同じ店舗にレビューは1度だけです。あなたはすでにこのお店にレビューを投稿しています。']);
         }
 
         $review = new Review([

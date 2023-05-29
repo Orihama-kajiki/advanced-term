@@ -17,6 +17,9 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', [ShopController::class, 'index'])->name('shops.index');
 Route::get('/detail/{shop_id}', [ShopController::class, 'detail'])->name('detail');
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
 Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
   $user = User::find($id);
   if (!$user || !hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {

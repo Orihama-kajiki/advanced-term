@@ -154,6 +154,10 @@
   transform: translateY(-50%);
 }
 
+th.text-left {
+    text-align: left !important;
+}
+
 .carender-icon {
   position: absolute;
   top: 50%;
