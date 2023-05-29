@@ -2,12 +2,13 @@
 飲食店予約サービス
 
 <--- トップ画面の画像 ---->
+<img width="1437" alt="shop_all" src="https://github.com/Orihama-kajiki/advanced-term/assets/116421776/17f37765-7e02-4223-9263-a1a7a59b9a3c">
 
 ## 作成した目的
 Advancedtermの模擬演習提出のため。
 
 ## 機能一覧
-
+以下、権限毎に一覧を分けました。
 ### 利用者 (一般ユーザー)
 
 - 会員登録
@@ -74,12 +75,13 @@ Advancedtermの模擬演習提出のため。
 - qrcode: バージョン 1.5.3
 
 ## テーブル設計
-
 <--- 作成したテーブル設計の画像 ---->
+![table](https://github.com/Orihama-kajiki/advanced-term/assets/116421776/a8a0183e-670c-4c55-b9ea-2cddb12677f1)
 
 ## ER図
-
 <--- 作成したER図の画像 ---->
+![ER](https://github.com/Orihama-kajiki/advanced-term/assets/116421776/4c8dc2e9-b55a-4a99-94f5-d2726e0e3b5b)
+
 
 ## 環境構築
 
